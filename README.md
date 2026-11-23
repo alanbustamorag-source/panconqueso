@@ -4,14 +4,14 @@ Repositorio privado de trabajo: `alanbustamorag-source/panconqueso`.
 
 Se preparó la migración del addon 0.3.15 y de los canales de actualización.
 Android apunta a la próxima versión **0.1.6, código 10012**; Windows, a **0.1.5**.
-No se ha publicado una APK ni un EXE nuevo.
+Android aún no tiene una APK nueva. Windows se compiló correctamente en GitHub Actions; su artefacto es privado y queda pendiente probarlo dentro del juego.
 
 ## Versiones del juego
 
 | Plataforma | Hotfix estable verificado el 23-11-2026 | Estado de esta preparación |
 | --- | --- | --- |
 | Android | 26.62 | Código adaptado; falta compilar y probar en el dispositivo |
-| Windows | 26.63 | Código adaptado; falta compilar y probar dentro del juego |
+| Windows | 26.63 | Compilación comprobada; falta probar dentro del juego |
 
 Las fuentes oficiales están en [compatibilidad.md](docs/compatibilidad.md).
 La preparación reconoce 26.60, 26.62 y 26.63 y conserva el addon incluido sin
