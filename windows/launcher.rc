@@ -1,0 +1,36 @@
+// Bodriosafio Launcher 0.1.5
+#pragma code_page(65001)
+#include <windows.h>
+1 ICON "assets/bodriosafio.ico"
+1 RT_MANIFEST "launcher.manifest"
+201 RCDATA "assets/windows-x64-BuildLimitChanger.dll"
+202 RCDATA "assets/Bodriosafio_0_3_15.mcaddon"
+203 RCDATA "assets/CREDITOS_Y_LICENCIAS.txt"
+205 RCDATA "assets/BodriosafioEffects.dll"
+204 RCDATA "assets/LEEME_LAUNCHER.txt"
+1 VERSIONINFO
+ FILEVERSION 0,1,5,0
+ PRODUCTVERSION 0,1,5,0
+ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+ FILEFLAGS VS_FF_PRERELEASE
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+BEGIN
+ BLOCK "StringFileInfo"
+ BEGIN
+  BLOCK "040904b0"
+  BEGIN
+   VALUE "CompanyName", "Bodriosafio - Proyecto de Alan Bustamante\0"
+   VALUE "FileDescription", "Bodriosafio Launcher para Minecraft Bedrock 26.60\0"
+   VALUE "FileVersion", "0.1.5\0"
+   VALUE "InternalName", "BodriosafioLauncher\0"
+   VALUE "OriginalFilename", "Bodriosafio_Launcher_Windows_0_1_5.exe\0"
+   VALUE "ProductName", "Bodriosafio Launcher\0"
+   VALUE "ProductVersion", "0.1.5\0"
+  END
+ END
+ BLOCK "VarFileInfo"
+ BEGIN
+  VALUE "Translation", 0x409, 1200
+ END
+END

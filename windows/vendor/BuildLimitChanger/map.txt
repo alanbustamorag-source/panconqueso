@@ -1,0 +1,6 @@
+BLC {
+  global:
+    mod_init;
+  local:
+    *;
+};

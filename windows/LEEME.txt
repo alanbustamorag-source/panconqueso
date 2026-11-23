@@ -1,0 +1,40 @@
+BODRIOSAFÍO LAUNCHER WINDOWS 0.1.4
+
+Un solo ejecutable incluye:
+- Complemento del Nether.
+- Anticombustión nativa para el Minecraft Windows 1.26.60.5 exacto.
+- Addon BP 0.3.15 y RP 1.5.15.
+
+USO
+1. Cierra el launcher anterior y abre Bodriosafio_Launcher_Windows_0_1_4.exe.
+2. Usa Actualizar addon para importar el addon corregido. Si GitHub ofrece
+   una versión anterior o no responde, usa la copia incluida 0.3.15.
+3. Espera a que Minecraft termine de importar y vuelve al launcher.
+4. Pulsa Jugar. El launcher abre o encuentra Minecraft y prepara los dos
+   complementos automáticamente. Espera el mensaje Listo y abre tu mundo.
+5. Activa BP 0.3.15 y RP 1.5.15 en el mundo.
+
+El botón Jugar prepara Anticombustión cada vez que abras Minecraft.
+No necesitas extraer DLL ni abrir el activador de la primera prueba.
+La autoactualización del launcher sigue disponible en Actualizar launcher.
+Al instalar una actualización se conserva una copia del ejecutable anterior.
+
+PRUEBA EN UN MUNDO DE PRUEBA
+/function dificultad/pildora_on
+/give @s bodriosafio:pildora 1
+/scriptevent bodriosafio:dificultad probar_pildora 10
+/function dificultad/anticombustion_estado
+
+La pastilla renueva dos horas de juego. Al agotarse el tiempo se produce
+una explosión de potencia 4. Consumir un tótem fija cinco minutos para
+alcanzar a tomar otra pastilla.
+
+VALIDACIÓN
+Compilación Windows x64 e integridad de los tres recursos comprobadas.
+90 comprobaciones de perfiles, canales, exportaciones, reintentos y cancelación
+aprobadas. La DLL conserva la validación aislada anterior de registro e icono.
+La ejecución de la interfaz/inyección de procesos no pudo probarse en este
+entorno. Falta la prueba real dentro de Minecraft; el módulo sigue experimental.
+
+El registro local y los diagnósticos se guardan con los datos del launcher.
+No se modifica Minecraft.Windows.exe en disco.

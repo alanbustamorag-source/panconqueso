@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "project": "bodriosafio",
+  "channel": "stable",
+  "version": "0.3.15",
+  "minecraft": "26.62",
+  "minimum_launcher": {
+    "android": "0.1.4",
+    "windows": "0.1.2"
+  },
+  "addon": {
+    "url": "https://raw.githubusercontent.com/alanbustamorag-source/panconqueso/main/Bodriosafio_0_3_15.mcaddon",
+    "sha256": "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3",
+    "size": 376306
+  },
+  "packs": [
+    {
+      "type": "data",
+      "uuid": "0c6db7ac-4c6f-4942-bae6-c16b5065036b",
+      "version": [
+        0,
+        3,
+        15
+      ]
+    },
+    {
+      "type": "resources",
+      "uuid": "1d763fb9-7cb5-429f-9789-b4b16e2301d1",
+      "version": [
+        1,
+        5,
+        15
+      ]
+    }
+  ],
+  "notes": "Anticombustión corregida: pastilla, temporizador, explosión y prórroga por tótem funcionan con o sin módulo nativo. Sin módulo, contador en pantalla; con módulo, efecto e icono propios.",
+  "compatibility_targets": {
+    "android": "26.62",
+    "windows": "26.63",
+    "runtime_tested": false
+  }
+}

@@ -1,0 +1,37 @@
+# Signing material and provider credentials must stay outside Git.
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.key
+*.pem
+.env
+.env.*
+local.properties
+key.properties
+keystore.properties
+signing.properties
+credentials*.json
+*service-account*.json
+
+# Build outputs and unreviewed application packages.
+build/
+**/build/
+.gradle/
+.idea/
+*.apk
+*.aab
+*.exe
+*.so
+*.o
+*.class
+__pycache__/
+*.pyc
+*.log
+
+# Personal game data.
+minecraftWorlds/
+worlds/
+*.mcworld
+accounts.json
+tokens.json

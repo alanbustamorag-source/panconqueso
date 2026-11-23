@@ -1,0 +1,20 @@
+{
+  "checked_on": "2026-11-23",
+  "repository": "alanbustamorag-source/panconqueso",
+  "files_reviewed": 97,
+  "addon_sha256": "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3",
+  "host_tests": {
+    "android_profile": "44 Android profile/version checks passed (host JVM, not Minecraft)",
+    "windows_profile": "43 profile/version checks passed",
+    "windows_channel": "PASS: 20 Windows update channel checks",
+    "windows_integrated": "23 integrated launcher and update contract checks passed",
+    "windows_effects_readiness": "10 native readiness/retry/cancellation checks passed"
+  },
+  "not_performed": [
+    "Android APK compilation/signing",
+    "Windows EXE cross-compilation",
+    "Android device execution",
+    "Minecraft Windows execution",
+    "Anonymous download from private repository"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "project": "Bodriosafio - Alan Bustamante",
+  "upstream": "https://github.com/LiteLDev/LeviLaunchroid/releases/tag/v1.6.0",
+  "upstream_release_apk_sha256": "ae399483da11cb6bfc3ee213f6e849557fba907bd43182deab3d8f5f7525670a",
+  "build_limit_changer": "https://github.com/Zeuroux/BuildLimitChanger/releases/tag/v1.1",
+  "native_sha256": "4791a3d41884a4c49bc6ba02327684433ede70a8ef03fc3a351c01f321b97a17",
+  "note": "New Java updater compiled against Android 36 and desugared for API 28; added as secondary DEX to the pinned own 0.1.3 APK. Existing smali hooks and version constants updated. All official JNI libraries and original assets unchanged.",
+  "application_id": "org.levimc.launcher",
+  "version_name": "0.1.4",
+  "version_code": 10004,
+  "upstream_source_tag": "v1.6.0",
+  "upstream_source_archive_sha256": "76365e74c9fd773d2d424a37e2080b1498d957f3527c647aab58769269be1e66",
+  "native_submodules": {
+    "preloader": {
+      "repository": "https://github.com/LiteLDev/preloader-android",
+      "commit": "5d108da350ce3e7f13f51415f81e65344ecd5d14"
+    },
+    "libHttpClient": {
+      "repository": "https://github.com/microsoft/libHttpClient",
+      "commit": "f8ae1d9cf931d9d55542865eee395adca5bdbe41"
+    }
+  },
+  "addon_sha256": "ebebda28ee003acba75da6970aca4d6705cabeda93ae7c26d99a97f071375437",
+  "native_game_is_not_bundled": true,
+  "signing_certificate_sha256": "144b63f97269476b81895a3de9ac6ee3172cedde94399f8dae7c2bc4279beb47",
+  "release_apk_sha256": "40cda91ca1503798ffd5ff2fcecc1618733c8245d97fdc379ee2ac8357ec2c06",
+  "resolved_minecraft_auth_snapshot": "main-6c3f90dabd-1",
+  "diagnostic_build": false,
+  "previous_application_id": "cl.bodriosafio.launcher",
+  "release_build_method": "New Java 8 updater compiled with ECJ 3.38 and Android SDK 36, D8 min API 28; integrated into own pinned APK 0.1.3 with Apktool 3.0.3",
+  "gradle_build_for_this_release": false,
+  "native_identity_requirement": "The unmodified gxcore bootstrap requires org.levimc.launcher as the application/process identity.",
+  "addon_update_channel": "https://raw.githubusercontent.com/Bnnnlss/bodriosafio-updates/main/latest.json",
+  "publication_status": "Pending owner upload: integration is read-only"
+}

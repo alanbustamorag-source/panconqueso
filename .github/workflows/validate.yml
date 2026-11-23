@@ -1,0 +1,44 @@
+name: Comprobar y compilar Windows
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Obtener fuentes
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Validar paquetes y pruebas del host
+        run: python3 scripts/validate.py
+
+      - name: Instalar compilador Windows
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y g++-mingw-w64-x86-64
+
+      - name: Compilar Windows sin publicar una release
+        env:
+          BODRIO_CXX: x86_64-w64-mingw32-g++-posix
+        run: bash windows/build.sh
+
+      - name: Conservar compilación y resultados para revisión
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Bodriosafio-Windows-0.1.5-preparacion
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            windows/build/Bodriosafio_Launcher_Windows_0_1_5.exe
+            windows/build/launcher-windows-latest.json
+            validation/resultados.json

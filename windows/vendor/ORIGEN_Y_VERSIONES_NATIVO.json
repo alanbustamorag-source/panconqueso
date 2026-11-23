@@ -1,0 +1,70 @@
+{
+  "integration_name": "Bodriosafio Nether Nativo",
+  "integration_version": "0.1.0",
+  "addon_version": "0.3.13",
+  "author_of_original_native_code": "Zeuroux",
+  "original_project": "https://github.com/Zeuroux/BuildLimitChanger",
+  "original_release": "v1.1",
+  "source_commit": "5c66a0728a956601f332db2caf6179da4caff832",
+  "source_changes_since_release": [
+    "LICENSE",
+    "README.md"
+  ],
+  "native_binaries_modified": false,
+  "compiled_by_this_integration": false,
+  "integration_changes": [
+    "Nether min=0 max=256 profile",
+    "Spanish installation guides",
+    "Addon range diagnostic",
+    "Compact difficulty diagnostic"
+  ],
+  "profile": {
+    "Overworld": {
+      "min": -64,
+      "max": 320
+    },
+    "Nether": {
+      "min": 0,
+      "max": 256
+    },
+    "TheEnd": {
+      "min": 0,
+      "max": 256
+    }
+  },
+  "assets": [
+    {
+      "name": "android-arm64-libBuildLimitChanger.so",
+      "url": "https://github.com/Zeuroux/BuildLimitChanger/releases/download/v1.1/android-arm64-libBuildLimitChanger.so",
+      "size_bytes": 16520,
+      "digest": "sha256:4791a3d41884a4c49bc6ba02327684433ede70a8ef03fc3a351c01f321b97a17"
+    },
+    {
+      "name": "android-x86_64-libBuildLimitChanger.so",
+      "url": "https://github.com/Zeuroux/BuildLimitChanger/releases/download/v1.1/android-x86_64-libBuildLimitChanger.so",
+      "size_bytes": 20120,
+      "digest": "sha256:76b15bcb7579a51e6728de0b4b5d0d2e0b90dc9a7e193bdfff8f063167dd4f72"
+    },
+    {
+      "name": "linux-x86_64-libBuildLimitChanger.so",
+      "url": "https://github.com/Zeuroux/BuildLimitChanger/releases/download/v1.1/linux-x86_64-libBuildLimitChanger.so",
+      "size_bytes": 22768,
+      "digest": "sha256:3d95da67b97b5a30bc44ee82f10dcb2e8c53a8b9722440cbeb019d25d42c8bee"
+    },
+    {
+      "name": "windows-x64-BuildLimitChanger.dll",
+      "url": "https://github.com/Zeuroux/BuildLimitChanger/releases/download/v1.1/windows-x64-BuildLimitChanger.dll",
+      "size_bytes": 34304,
+      "digest": "sha256:b6f1d16b1d455c6127b1c9f91b3b400c9a7c1c734c52381bc52387ca626afcf8"
+    }
+  ],
+  "platform_files": {
+    "PC_Windows_x64": "windows-x64-BuildLimitChanger.dll",
+    "Android_ARM64": "android-arm64-libBuildLimitChanger.so",
+    "Android_x86_64": "android-x86_64-libBuildLimitChanger.so",
+    "Servidor_Windows_x64": "windows-x64-BuildLimitChanger.dll",
+    "Servidor_Linux_x64": "linux-x86_64-libBuildLimitChanger.so"
+  },
+  "minecraft_game_test": "not run",
+  "exact_client_version_compatibility": "pending user game test"
+}

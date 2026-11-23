@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "project": "bodriosafio",
+  "channel": "stable",
+  "version": "0.3.13",
+  "minecraft": "26.60",
+  "minimum_launcher": {
+    "android": "0.1.4",
+    "windows": "0.1.2"
+  },
+  "addon": {
+    "url": "https://raw.githubusercontent.com/alanbustamorag-source/panconqueso/main/Bodriosafio_0_3_13.mcaddon",
+    "sha256": "ebebda28ee003acba75da6970aca4d6705cabeda93ae7c26d99a97f071375437",
+    "size": 410652
+  },
+  "packs": [
+    {
+      "type": "data",
+      "uuid": "0c6db7ac-4c6f-4942-bae6-c16b5065036b",
+      "version": [
+        0,
+        3,
+        13
+      ]
+    },
+    {
+      "type": "resources",
+      "uuid": "1d763fb9-7cb5-429f-9789-b4b16e2301d1",
+      "version": [
+        1,
+        5,
+        13
+      ]
+    }
+  ],
+  "notes": "Canal inicial de actualizaciones. Addon 0.3.13, sin cambios de jugabilidad."
+}
