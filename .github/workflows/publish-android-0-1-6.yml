@@ -109,6 +109,18 @@ jobs:
               if hashlib.sha256(addon).hexdigest() != "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3":
                   raise SystemExit("El addon integrado no coincide")
 
+          sdk = os.environ.get("ANDROID_HOME") or os.environ.get("ANDROID_SDK_ROOT")
+          signers = sorted(Path(sdk).glob("build-tools/*/apksigner")) if sdk else []
+          if not signers:
+              raise SystemExit("No se encontró el verificador oficial de firmas Android")
+          signature = subprocess.run(
+              [str(signers[-1]), "verify", "--verbose", "--print-certs", str(apk)],
+              check=True, text=True, capture_output=True,
+          ).stdout
+          if "Signer #1 certificate SHA-256 digest: 144b63f97269476b81895a3de9ac6ee3172cedde94399f8dae7c2bc4279beb47" not in signature:
+              raise SystemExit("Certificado Android inesperado")
+          print("Firma Android verificada con apksigner; certificado de Bodriosafío correcto.")
+
           notes = (
               "Launcher Android 0.1.6 (versionCode 10012), ARM64, Android 9 o superior.\n\n"
               "Incluye el addon 0.3.15 y consulta el canal de actualizaciones de este repositorio. "
