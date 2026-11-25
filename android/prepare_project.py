@@ -53,9 +53,9 @@ for file in (HERE / 'overlay').rglob('*'):
 (output / 'PREPARACION_0_1_6.md').write_text(
     '# Android 0.1.6 / 10012: fuentes preparadas\n\n'
     'Origen migrado a alanbustamorag-source/panconqueso.\n'
-    'Objetivo Android 26.62; nativos limitados a su compilación anterior.\n'
+    'Nativos obligatorios; la adaptación del hotfix objetivo exige el binario exacto.\n'
     'No se ha generado una APK ni se ha usado una clave de firma.\n'
-    'Antes de distribuir: completar la revisión del mecanismo de licencia,\n'
+    'Antes de distribuir: verificar la procedencia de las dependencias,\n'
     'compilar, probar en el dispositivo y firmar fuera de GitHub.\n'
     'La distribución automática sigue pendiente de un destino accesible a jugadores.\n')
 print(json.dumps({'prepared_project': str(output), 'version': CONFIG['version'],

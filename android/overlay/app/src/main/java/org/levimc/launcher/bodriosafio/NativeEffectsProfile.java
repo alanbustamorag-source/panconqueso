@@ -30,17 +30,9 @@ public final class NativeEffectsProfile {
     private NativeEffectsProfile() {}
 
     public static void prepareForLaunch(Context context, GameVersion version) throws Exception {
+        ProfileRules.requireNativeVersion(version == null ? null : version.versionCode);
         if (version == null || version.modsDir == null) throw new Exception("No se encontró el perfil de Minecraft.");
         if (MinecraftActivityState.isRunning(context)) throw new Exception("Cierra Minecraft antes de preparar Anticombustión.");
-        if (!ProfileRules.nativeCompatible(version.versionCode)) {
-            ModManager manager = ModManager.getInstance();
-            manager.setCurrentVersion(version);
-            manager.reloadMods();
-            manager.setModEnabled(MOD_ID, false);
-            ensureBundledAddon(context, version);
-            BodriosafioProfile.log(context, "Anticombustión mediante addon; módulo nativo sin activar en esta versión.");
-            return;
-        }
         File directory = new File(version.modsDir, MOD_ID);
         Files.createDirectories(directory.toPath());
         File library = new File(directory, "libBodriosafioEffects.so");
@@ -105,7 +97,9 @@ public final class NativeEffectsProfile {
     }
 
     public static void requireLoaded(Set<String> loaded, String gameVersion) {
-        if (ProfileRules.nativeCompatible(gameVersion) && !loaded.contains(MOD_ID)) throw new IllegalStateException(
+        if (!ProfileRules.nativeCompatible(gameVersion)) throw new IllegalStateException(
+            "Esta compilación de Minecraft aún necesita adaptar los módulos nativos de Bodriosafío.");
+        if (!loaded.contains(MOD_ID)) throw new IllegalStateException(
             "No se pudo cargar Anticombustión nativa. Esta prueba requiere el motor ARM64 1.26.60.4 exacto. Revisa Registro y reinicia el launcher.");
     }
 

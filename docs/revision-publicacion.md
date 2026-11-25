@@ -33,17 +33,19 @@ quedan limitados a sus compilaciones exactas anteriores.
   overlay. En la base revisada, `StubStore.hasVerifiedLicense()` devuelve
   `true` y `MainActivity.checkLicense()` devuelve `0`. También existe una
   validación exterior que exige instalación desde Google Play. Estas
-  observaciones no permiten afirmar por sí solas una infracción, pero hace
-  falta aclarar el mecanismo y sus derechos antes de redistribuir la APK.
+  observaciones no permiten afirmar por sí solas una infracción, pero estos métodos deben evaluarse junto con el control exterior y las
+  condiciones del proveedor. La documentación oficial de Levi exige una
+  copia legítima instalada y contempla los mods nativos; no se deduce una
+  infracción solo de un método de compatibilidad con resultado fijo.
 - APK/EXE y bibliotecas originales del juego: excluidos.
 - EXE Windows antiguo: contiene el origen antiguo; no se presenta como una
   compilación del código migrado.
 
 ## Publicación pendiente
 
-1. Completar la revisión del mecanismo de licencia de la base Android.
+1. Conservar los requisitos de copia legítima y los avisos de las dependencias; no retirar controles de compra/licencia.
 2. Aplicar el overlay sobre la base completa y revisar el diff.
-3. Compilar y probar el arranque y los packs en el juego objetivo.
+3. Identificar el motor exacto, adaptar los módulos nativos y probarlos dentro del juego objetivo. No aceptar una preparación que los omita.
 4. Firmar Android con la misma clave fuera de GitHub.
 5. Decidir un destino de descarga accesible a los jugadores. El repositorio
    actual continúa privado y las aplicaciones no contienen credenciales.

@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "required": true,
+  "fallback_to_addon_only": false,
+  "profiles": [
+    {
+      "platform": "android",
+      "architecture": "arm64-v8a",
+      "minecraft": "1.26.60.4",
+      "engine_sha256": "6c7b409d832e182537c0b1dbb8cc3c92f60b7795db7ea5e9f626fb6d6cb8c77f",
+      "engine_build_id": "eb291b883dfdfaff70c4999c2eabd61885ae3e15",
+      "gameplay_tested": false
+    },
+    {
+      "platform": "windows",
+      "architecture": "x64",
+      "minecraft": "1.26.60.5",
+      "engine_sha256": "988f6a61403b4381aa41e6c66d64cce441b14e561a9b10f647c2758ef3f2672a",
+      "gameplay_tested": false
+    }
+  ],
+  "pending_targets": [
+    {
+      "platform": "android",
+      "minecraft": "26.62",
+      "status": "needs_exact_engine_binary_and_native_port"
+    },
+    {
+      "platform": "windows",
+      "minecraft": "26.63",
+      "status": "needs_exact_engine_binary_and_native_port"
+    }
+  ]
+}

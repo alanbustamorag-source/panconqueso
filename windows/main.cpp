@@ -92,9 +92,8 @@ void start() {
             auto result=bodrio::launch_and_prepare([](const bodrio::Progress& p) {
                 send(new Update{p.text,p.step,false,false,p.detected_version});
             },[] { return cancel_requested.load(); });
-            std::wstring done=result.effects_prepared
-                ? L"Listo: Nether y Anticombustión preparados. Abre tu mundo desde Minecraft."
-                : L"Minecraft abierto en modo addon. Importa y activa los packs; Nether ampliado y el efecto nativo quedan pendientes para esta versión.";
+            if (!result.effects_prepared) throw std::runtime_error("La preparación nativa de Bodriosafío no se completó.");
+            std::wstring done=L"Listo: Nether y Anticombustión preparados. Abre tu mundo desde Minecraft.";
             if (result.config_changed) done+=L" Si el mundo estaba abierto, sal al menú y vuelve a entrar.";
             send(new Update{done,4,true,true,result.display_version});
         } catch (const bodrio::LoadUncertain& e) {
@@ -205,7 +204,7 @@ LRESULT CALLBACK proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
             case help_id:
                 MessageBoxW(hwnd,
                     L"Bodriosafío Launcher\nVersión 0.1.5 · Anticombustión integrada\n\n"
-                    L"Minecraft objetivo: 26.60 / 26.62 / 26.63 (Windows x64). En hotfix nuevos se usa modo addon sin nativos no validados.\n\n"
+                    L"Minecraft objetivo: 26.60 / 26.62 / 26.63 (Windows x64). Los módulos nativos son obligatorios; los hotfix nuevos están pendientes de adaptación.\n\n"
                     L"Jugar abre Minecraft y prepara automáticamente el Nether y Anticombustión.\n"
                     L"Actualizar addon busca la última versión, verifica la descarga y abre su importación en Minecraft.\n"
                     L"Incluye el addon corregido 0.3.15 y evita volver a una versión anterior del canal.\n"

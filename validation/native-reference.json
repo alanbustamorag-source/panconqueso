@@ -1,0 +1,13 @@
+{
+  "platform": "android",
+  "architecture": "arm64-v8a",
+  "engine_bytes": 342231392,
+  "engine_sha256": "6c7b409d832e182537c0b1dbb8cc3c92f60b7795db7ea5e9f626fb6d6cb8c77f",
+  "engine_build_id": "eb291b883dfdfaff70c4999c2eabd61885ae3e15",
+  "matching_profile_versions": [
+    "1.26.60.4"
+  ],
+  "new_native_port_verified": false,
+  "gameplay_tested": false,
+  "game_binary_exported": false
+}

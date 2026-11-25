@@ -1,4 +1,4 @@
-> Migración del 23-11-2026: nuevo canal alanbustamorag-source/panconqueso. En hotfix 26.62/26.63 se usa modo addon sin DLL nativas no validadas.
+> Migración del 23-11-2026: nuevo canal alanbustamorag-source/panconqueso. Los nativos son obligatorios. La adaptación a 26.62/26.63 está pendiente del binario exacto y una prueba real.
 
 # Bodriosafio Launcher Windows 0.1.5
 

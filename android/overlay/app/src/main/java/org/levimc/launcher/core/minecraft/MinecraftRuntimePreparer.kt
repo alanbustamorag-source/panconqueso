@@ -134,8 +134,7 @@ object MinecraftRuntimePreparer {
         //nativeSetupRuntime(modManager.currentVersion?.modsDir?.absolutePath.toString())
         val nativeModResult = loadNativeMods(context, launchIntent, modManager, listener, trace)
         org.levimc.launcher.bodriosafio.NativeEffectsProfile.requireLoaded(nativeModResult.loadedModIds, version.versionCode)
-        if (org.levimc.launcher.bodriosafio.ProfileRules.nativeCompatible(version.versionCode) &&
-            !nativeModResult.loadedModIds.contains(org.levimc.launcher.bodriosafio.ProfileRules.MOD_ID)) {
+        if (!nativeModResult.loadedModIds.contains(org.levimc.launcher.bodriosafio.ProfileRules.MOD_ID)) {
             throw IllegalStateException("No se pudo activar el complemento de Bodriosafío. Revisa el registro antes de entrar al mundo.")
         }
 

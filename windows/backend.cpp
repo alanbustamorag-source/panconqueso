@@ -428,9 +428,8 @@ LaunchResult prepare_running_game(DWORD pid, const Reporter& report,const std::f
     report({L"Leyendo la versión de Minecraft…",1});
     auto version=verify_game_version(image,report);
     if(!supported_effects_version(version.a,version.b,version.c,version.d)) {
-        report({L"Minecraft abierto en modo addon; los módulos nativos requieren validación para esta compilación.",4,version.display});
-        log_line(L"Modo addon: no se carga ninguna DLL ni se modifica el perfil de dimensiones en esta compilación.");
-        return {version.raw,{},false,false,version.display,false};
+        throw std::runtime_error(utf8(L"Los módulos nativos de Bodriosafío todavía no están adaptados a Minecraft "
+            +version.display+L". No se completó la preparación de Nether y Anticombustión; no se sustituirán por modo addon."));
     }
     auto config=config_for(query.h,image);
     bool loaded=existing_native(pid);

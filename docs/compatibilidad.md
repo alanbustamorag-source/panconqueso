@@ -1,43 +1,49 @@
-# Compatibilidad de la preparación
+# Compatibilidad: nativos obligatorios
 
-Consulta realizada el 23 de noviembre de 2026.
+El usuario requiere el launcher completo con Nether ampliado y Anticombustión
+nativa. Se elimina la propuesta anterior de funcionar sin ellos.
 
-Fuentes oficiales:
+## Perfiles y límites
 
-- [Bedrock 26.62, 5 de noviembre](https://feedback.minecraft.net/hc/en-us/articles/50159598275725-Minecraft-Bedrock-Edition-26-62-Hotfix-Changelog).
-- [Bedrock 26.63, 11 de noviembre](https://feedback.minecraft.net/hc/en-us/articles/50306516691853-Minecraft-Bedrock-Edition-26-63-Hotfix-Changelog).
-- [Índice oficial de versiones estables](https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs).
+| Plataforma | Perfil de motor existente | Hotfix objetivo |
+| --- | --- | --- |
+| Android ARM64 | 1.26.60.4, con SHA-256 y GNU Build ID fijados | 26.62: falta verificar el motor exacto y adaptar el perfil |
+| Windows x64 | 1.26.60.5, con SHA-256 fijado | 26.63: falta verificar el ejecutable exacto y adaptar el perfil |
 
-La publicación 26.63 menciona Windows, servidores y PlayStation 5; no anuncia
-ese hotfix para Android. Se usa 26.62 como objetivo Android verificable y
-26.63 para Windows. No se interpretan publicaciones de usuarios o versiones
-Preview como confirmación oficial de una versión estable posterior.
+native-support.json separa los perfiles existentes de los objetivos pendientes.
+Que el parser reconozca un número o que el programa compile no demuestra que
+una biblioteca nativa funcione en esa compilación. Tampoco hay todavía prueba
+real de juego de los perfiles anteriores en este entorno.
 
-Reconocer el número de una versión no demuestra que el motor arranque con
-el cargador ni que un módulo nativo funcione. La ejecución en ambos sistemas
-queda pendiente. Los offsets nativos existentes no se han regenerado ni
-se han ampliado sus listas de versiones por suposición.
+## Comportamiento preparado
 
-## Cambio Android
+Android exige un perfil nativo antes de recuperar/preparar el perfil de juego.
+El runtime exige que se hayan cargado ambos módulos propios. No deshabilita
+los módulos para arrancar con solo el addon.
 
-`ProfileRules.compatible` admite 26.60, 26.62 y 26.63 con sus revisiones internas.
-`nativeCompatible` solo admite 26.60.4 / 1.26.60.4. En otra versión admitida,
-se deshabilitan únicamente los dos módulos propios de Bodriosafío y se prepara
-el addon. La comprobación del runtime ya no exige un módulo que se decidió
-no cargar. Se conservan las comprobaciones de integridad, UUID y recuperación
-de las transacciones del instalador.
+Windows exige su perfil nativo y no devuelve éxito sin el efecto preparado.
+Si Minecraft ya se abrió antes de detectar una incompatibilidad, el launcher
+no fuerza su cierre ni entra a un mundo: informa que la preparación falló.
 
-## Cambio Windows
+No se amplían las listas de builds ni se cambian offsets suponiendo que una
+actualización conserve su disposición de memoria.
 
-Se reconocen los formatos directos y codificados de los hotfix 26.62 y 26.63.
-La ruta de ejecución devuelve el modo addon antes de extraer DLL, escribir
-la configuración del Nether o realizar una inyección, salvo en 1.26.60.5.
-La interfaz distingue ambos resultados.
+## Identificación local
 
-## Confirmación que falta
+scripts/inspect_native_game.py calcula el SHA-256 del motor ARM64 y lee su
+GNU Build ID desde ELF. Acepta un APK split local o la biblioteca suelta.
+Los binarios se procesan en un temporal local, no se suben a GitHub y no
+forman parte de la salida. Un motor no identificado necesita análisis antes
+de producir un módulo para esa compilación.
 
-Antes de generar una entrega para un dispositivo que muestre otra versión,
-registrar su número completo y contrastarlo con la publicación oficial
-correspondiente. Para reactivar nativos hace falta validar el binario exacto
-de esa compilación; no debe subirse el ejecutable ni la biblioteca del juego
-al repositorio para hacer ese análisis.
+## Fuentes
+
+- [Bedrock 26.62](https://feedback.minecraft.net/hc/en-us/articles/50159598275725-Minecraft-Bedrock-Edition-26-62-Hotfix-Changelog).
+- [Bedrock 26.63](https://feedback.minecraft.net/hc/en-us/articles/50306516691853-Minecraft-Bedrock-Edition-26-63-Hotfix-Changelog): Windows, servidores y PS5.
+- [Índice oficial](https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs).
+- [LeviLauncher y la copia legítima](https://docs.levimc.org/LeviLauncher/android/).
+- [SDK oficial de mods nativos](https://docs.levimc.org/LeviLauncher/android/guide/developer).
+
+Falta confirmar la versión completa instalada del usuario. Estos objetivos
+son los hotfix oficiales que se pudieron verificar; no garantizan que sean
+la copia instalada ni que los nativos nuevos estén adaptados.

@@ -7,7 +7,7 @@ El overlay Android parte de LeviLaunchroid 1.6.0 de LeviMC/LiteLDev. Conserva
 su licencia Apache-2.0 en `licenses/LeviLaunchroid-Apache-2.0.txt` y los avisos
 de las dependencias en `licenses/Android-original-notices.txt`. Las
 modificaciones del 23-11-2026 preparan el nuevo origen de actualizaciones,
-la versión 0.1.6 y el modo addon para hotfix sin nativos validados. El archivo
+la versión 0.1.6 y la comprobación de compatibilidad con sus módulos nativos obligatorios. El archivo
 `android/upstream-original.json` conserva la procedencia histórica original.
 
 Windows conserva sus dependencias y avisos en `windows/vendor` y

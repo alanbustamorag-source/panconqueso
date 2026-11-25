@@ -29,6 +29,13 @@ public final class ProfileRules {
         return "26.60.4".equals(version) || "1.26.60.4".equals(version);
     }
 
+    public static void requireNativeVersion(String version) throws IOException {
+        if (!nativeCompatible(version)) {
+            throw new IOException("Los módulos nativos de Bodriosafío todavía no están adaptados a Minecraft "
+                + displayVersion(version) + ". La preparación requiere Nether y Anticombustión nativos; no se sustituirán por modo addon.");
+        }
+    }
+
     public static String displayVersion(String version) {
         if (version == null || version.trim().isEmpty()) return "Sin detectar";
         String value = version.trim();

@@ -1,28 +1,26 @@
-BODRIOSAFÍO LAUNCHER WINDOWS 0.1.5 · PREPARACIÓN
+BODRIOSAFÍO LAUNCHER WINDOWS 0.1.5 · PREPARACIÓN CON NATIVOS
 
-Este programa necesita tu copia instalada de Minecraft Bedrock para Windows x64.
-No incluye Minecraft ni evita su compra o validación.
+Necesita tu copia legítima instalada de Minecraft Bedrock para Windows x64.
+No incluye Minecraft ni reemplaza su licencia.
 
-VERSIONES OBJETIVO
-Minecraft 26.60, 26.62 y 26.63. La ejecución dentro del juego actualizado
-sigue pendiente de prueba. No se anuncia compatibilidad con Preview.
+REQUISITO
+Nether ampliado y Anticombustión nativa forman parte del launcher completo.
+No se ofrece un modo alternativo sin esos módulos.
+
+PERFIL NATIVO DISPONIBLE
+Minecraft 1.26.60.5, correspondiente al binario estudiado anteriormente.
+Su ejecución real dentro del juego sigue necesitando prueba.
+La adaptación de nativos para 26.62/26.63 está pendiente del binario exacto.
+Reconocer esos números de versión no significa que los módulos ya funcionen.
 
 USO
-1. Abre Bodriosafio_Launcher_Windows_0_1_5.exe.
-2. Usa Actualizar addon para importar y activar BP 0.3.15 / RP 1.5.15.
-   El addon incluido puede usarse aunque el canal privado no esté disponible.
-3. Pulsa Jugar para abrir o encontrar Minecraft.
-
-En Minecraft 1.26.60.5 se mantiene la preparación nativa anterior.
-En los hotfix nuevos se usa modo addon: no se cargan DLL ni se escribe la
-configuración del Nether con offsets de otra compilación. Por ello, el
-Nether ampliado y el registro nativo de Anticombustión no están disponibles
-en esos hotfix. La pastilla y su contador forman parte de la lógica del addon.
+Actualizar addon importa los packs BP 0.3.15 / RP 1.5.15.
+Jugar prepara los dos módulos solo con una compilación que tenga perfil nativo.
+Si la versión no tiene perfil, la preparación muestra un error explícito;
+no se cambia a modo addon ni se anuncian los módulos como preparados.
+Si Minecraft ya se abrió, no se fuerza su cierre ni se entra a un mundo.
 
 ACTUALIZACIONES
-El código consulta alanbustamorag-source/panconqueso. Mientras ese repositorio
-sea privado, los jugadores sin acceso no podrán descargar automáticamente.
-No se incluye un token de GitHub en el programa.
-
-La compilación y las pruebas del host no demuestran funcionamiento dentro
-del juego. Prueba primero en un mundo de prueba y conserva tus exportaciones.
+El canal es alanbustamorag-source/panconqueso. El repositorio continúa privado;
+no hay descargas automáticas anónimas mientras no exista un destino público.
+Las aplicaciones no incluyen tokens de GitHub ni claves de firma.

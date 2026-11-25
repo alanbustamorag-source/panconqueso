@@ -69,6 +69,7 @@ public final class BodriosafioProfile {
     }
 
     public static synchronized void prepareForLaunch(Context context, GameVersion version) throws Exception {
+        ProfileRules.requireNativeVersion(version == null ? null : version.versionCode);
         log(context, "Inicio: recuperando el perfil y preparando complementos.");
         org.levimc.launcher.bodriosafio.update.AddonUpdateActivity.recoverBeforeLaunch(context, version);
         if (version == null || !ProfileRules.compatible(version.versionCode))
@@ -76,15 +77,6 @@ public final class BodriosafioProfile {
         if (version.abiList == null || !version.abiList.contains("arm64-v8a"))
             throw new IOException("Esta APK necesita la versión de Minecraft de 64 bits (ARM64).");
         if (version.modsDir == null) throw new IOException("No se encontró el perfil de Minecraft.");
-        if (!ProfileRules.nativeCompatible(version.versionCode)) {
-            ModManager manager = ModManager.getInstance();
-            manager.setCurrentVersion(version);
-            manager.reloadMods();
-            manager.setModEnabled(ProfileRules.MOD_ID, false);
-            NativeEffectsProfile.prepareForLaunch(context, version);
-            log(context, "Modo addon: módulos nativos pendientes de validar para " + version.versionCode);
-            return;
-        }
         File directory = new File(version.modsDir, ProfileRules.MOD_ID);
         if (!directory.isDirectory() && !directory.mkdirs()) throw new IOException("No se pudo preparar el complemento.");
         File library = new File(directory, "libBuildLimitChanger.so");

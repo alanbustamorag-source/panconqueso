@@ -1,27 +1,29 @@
-# Preparación Android 0.1.6 / 10012
+# Android 0.1.6 / 10012: nativos obligatorios
 
-`overlay` contiene archivos para aplicar sobre la versión completa del
-proyecto 0.1.5 revisión 7. No es un proyecto Gradle independiente.
+El overlay se aplica sobre el proyecto completo 0.1.5 r7; no es un proyecto
+Gradle independiente. El canal nuevo es alanbustamorag-source/panconqueso.
 
-Cambios preparados:
+Nether y Anticombustión nativos son requisitos. nativeCompatible conserva
+solo el perfil de motor 1.26.60.4. Otras compilaciones se rechazan antes de
+preparar los módulos o modificar su estado. No se cambia a una edición de
+solo addon. El port de 26.62 requiere verificar el motor exacto.
 
-- Origen de actualizaciones y validaciones de URL migrados a
-  `alanbustamorag-source/panconqueso`.
-- Objetivo estable Android 26.62 y reconocimiento de 26.60/26.62/26.63.
-- Modo addon para hotfix nuevos; conserva los nativos solo en 1.26.60.4.
-- Próxima versión de app 0.1.6, código 10012. No cambia el paquete Android.
+Las fuentes del módulo ARM64 están en native-effects. No se distribuye
+libminecraftpe.so ni se eliminan los controles de la copia oficial del juego.
+La licencia debe evaluarse junto con el flujo completo y las condiciones
+del proveedor; un método de compatibilidad con resultado fijo no prueba
+por sí solo una infracción.
 
-Aplicar cada archivo de `overlay` conservando su ruta relativa, revisar el
-diff y completar los pasos pendientes de `docs/revision-publicacion.md`.
-La APK nueva aún no se ha compilado ni firmado. La firma privada se mantiene
-fuera del repositorio. No usar la APK antigua como si contuviera estos cambios.
+## Preparar la base completa
 
-Para preparar la base completa en una carpeta nueva:
-
-```bash
+~~~bash
 python3 android/prepare_project.py /ruta/Bodriosafio_Launcher_Android_0_1_5_Fuentes.zip --output /ruta/nueva/Android_0_1_6
-```
+~~~
 
-El preparador exige el SHA-256 de la base revisada, comprueba las rutas del
-ZIP, aplica el overlay y conserva el paquete Android. No copia claves, no
-ejecuta workflows heredados y no compila ni publica una APK.
+El script comprueba el SHA-256 y las rutas, aplica el overlay y conserva la
+identidad de la app. No copia claves, no ejecuta workflows heredados y no
+compila ni publica una APK.
+
+Antes de firmar una entrega, completar el port sobre la compilación exacta
+y probar los módulos dentro del juego. Mantener la misma clave de firma fuera
+del repositorio para conservar la posibilidad de actualizar la app existente.

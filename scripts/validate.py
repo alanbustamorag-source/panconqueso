@@ -8,6 +8,8 @@ import re
 import shutil
 import subprocess
 import zipfile
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build/validation'
@@ -96,7 +98,7 @@ for name, arguments in [
     results['windows_' + name] = run([str(executable)] + arguments, ROOT / 'windows')
 
 report = {
-    'checked_on': '2026-11-23', 'repository': REPOSITORY,
+    'checked_on': datetime.now(ZoneInfo('America/Santiago')).date().isoformat(), 'repository': REPOSITORY,
     'files_reviewed': len(files), 'addon_sha256': ADDON_HASH,
     'host_tests': results,
     'not_performed': ['Android APK compilation/signing', 'Windows EXE cross-compilation',
