@@ -58,6 +58,9 @@ public final class AddonUpdateActivity extends Activity {
     }
 
     public static void checkHome(Activity host, GameVersion version, Button target) {
+        Object request = new Object();
+        target.setTag(request);
+        target.setText("Actualizar addon");
         if (version == null || !ProfileRules.compatible(version.versionCode)) return;
         java.lang.ref.WeakReference<Activity> owner = new java.lang.ref.WeakReference<>(host);
         java.lang.ref.WeakReference<Button> control = new java.lang.ref.WeakReference<>(target);
@@ -71,7 +74,8 @@ public final class AddonUpdateActivity extends Activity {
                 Activity activity = owner.get();
                 if (activity != null) activity.runOnUiThread(() -> {
                     Button button = control.get();
-                    if (button != null && !activity.isDestroyed() && !activity.isFinishing()) button.setText(current ? "Addon al día · " + latest.version : "Actualizar addon · " + latest.version);
+                    if (button != null && button.getTag() == request && !activity.isDestroyed() && !activity.isFinishing())
+                        button.setText(current ? "Addon al día · " + AddonChannel.display(bp) : "Actualizar addon · " + latest.version);
                 });
             } catch (Exception error) { BodriosafioProfile.log(context, "No se pudo comprobar el addon al abrir: " + error.getMessage()); }
         }, "bodriosafio-addon-check").start();
@@ -80,7 +84,8 @@ public final class AddonUpdateActivity extends Activity {
     public static void open(Activity host, GameVersion version) {
         if (!org.levimc.launcher.core.minecraft.LaunchPreparation.allowContentChanges(host)) return;
         try {
-            if (version == null || !ProfileRules.compatible(version.versionCode)) throw new Exception("Primero selecciona Minecraft 26.60, 26.62 o 26.63.");
+            if (version == null || !ProfileRules.compatible(version.versionCode))
+                throw new Exception("Selecciona en Herramientas un perfil compatible con el addon.");
             if (MinecraftActivityState.isRunning(host)) throw new Exception("Cierra Minecraft antes de actualizar sus packs.");
             ArrayList<String> paths = new ArrayList<>();
             for (Path path : gameRoots(host, version)) paths.add(path.toString());
@@ -113,7 +118,7 @@ public final class AddonUpdateActivity extends Activity {
         update = button(layout, "Actualizar addon", true); update.setEnabled(false);
         check = button(layout, "Buscar actualizaciones", false);
         file = button(layout, "Actualizar desde un archivo", false);
-        bundled = button(layout, "Usar versión incluida (0.3.15)", false);
+        bundled = button(layout, "Usar versión incluida (0.3.16)", false);
         Button back = button(layout, "Volver", false);
         update.setOnClickListener(v -> download());
         check.setOnClickListener(v -> refresh());
@@ -222,7 +227,7 @@ public final class AddonUpdateActivity extends Activity {
     private void installBundled() {
         work("Preparando la versión incluida…", () -> {
             byte[] bytes;
-            try (InputStream input = getAssets().open("bodriosafio/Bodriosafio_0_3_15.mcaddon")) { bytes = AddonChannel.read(input, AddonChannel.MAX_ARCHIVE); }
+            try (InputStream input = getAssets().open("bodriosafio/Bodriosafio_0_3_16.mcaddon")) { bytes = AddonChannel.read(input, AddonChannel.MAX_ARCHIVE); }
             if (!ProfileRules.ADDON_SHA256.equals(AddonChannel.digest(bytes))) throw new Exception("No se pudo verificar el addon incluido.");
             try (AddonInstaller.Prepared prepared = AddonInstaller.prepare(bytes, cache)) { return new AddonInstaller().install(prepared, roots, journals); }
         });

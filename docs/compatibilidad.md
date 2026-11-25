@@ -7,7 +7,7 @@ nativa. Se elimina la propuesta anterior de funcionar sin ellos.
 
 | Plataforma | Perfil de motor existente | Hotfix objetivo |
 | --- | --- | --- |
-| Android ARM64 | 1.26.60.4, con SHA-256 y GNU Build ID fijados | 26.62: falta verificar el motor exacto y adaptar el perfil |
+| Android ARM64 | 1.26.60.4, con SHA-256 y GNU Build ID fijados | 1.26.66.1 con módulo nativo publicado y verificación en emulación |
 | Windows x64 | 1.26.60.5, con SHA-256 fijado | 26.63: falta verificar el ejecutable exacto y adaptar el perfil |
 
 native-support.json separa los perfiles existentes de los objetivos pendientes.
@@ -44,6 +44,4 @@ de producir un módulo para esa compilación.
 - [LeviLauncher y la copia legítima](https://docs.levimc.org/LeviLauncher/android/).
 - [SDK oficial de mods nativos](https://docs.levimc.org/LeviLauncher/android/guide/developer).
 
-Falta confirmar la versión completa instalada del usuario. Estos objetivos
-son los hotfix oficiales que se pudieron verificar; no garantizan que sean
-la copia instalada ni que los nativos nuevos estén adaptados.
+El split ARM64 con código 972606601 corresponde al perfil 26.66.1. La 0.1.9 verifica el SHA-256 del motor y selecciona la biblioteca de Anticombustión correspondiente. El perfil 26.60.4 conserva su propia biblioteca. El módulo de 26.66.1 proviene de la APK firmada `android-0.1.6`; su registro y el Nether cuentan con pruebas en emulación documentadas en el commit `9774daeffb58d429af3f66e5f96f197248cb6644`. Falta una prueba de juego en Android.

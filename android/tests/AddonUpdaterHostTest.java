@@ -71,7 +71,7 @@ public final class AddonUpdaterHostTest {
         AddonChannel.read(new ByteArrayInputStream(bytes), bytes.length, -1, (count,total) -> {
             if (total != -1) throw new AssertionError("unknown transfer size must remain unknown");
         }); checks++;
-        check(feed.version.equals("0.3.15"), "feed version");
+        check(feed.version.equals(AddonChannel.display(feed.behaviorVersion)), "feed version matches the behavior pack");
         rejects(() -> feed.verify(Arrays.copyOf(bytes, bytes.length - 1)), "truncated download");
         byte[] corrupt = bytes.clone(); corrupt[100] ^= 1;
         rejects(() -> feed.verify(corrupt), "corrupt digest");
@@ -90,7 +90,7 @@ public final class AddonUpdaterHostTest {
             check(pack.resource.uuid.equals(AddonInstaller.RP), "nested RP");
             Path a = temp.resolve("a"), b = temp.resolve("b");
             List<Path> roots = Arrays.asList(a,b,a);
-            check(new AddonInstaller().install(pack, roots, journals).contains("0.3.15"), "fresh install");
+            check(new AddonInstaller().install(pack, roots, journals).contains(feed.version), "fresh install");
             for (Path p : Arrays.asList(a,b)) {
                 check(Files.exists(p.resolve("behavior_packs/Bodriosafio_BP/scripts/main.js")), "BP installed");
                 check(Files.exists(p.resolve("resource_packs/Bodriosafio_RP/manifest.json")), "RP installed");
@@ -111,7 +111,7 @@ public final class AddonUpdaterHostTest {
             check(Files.readString(c.resolve("behavior_packs/unrelated/marker.txt")).equals("untouched"), "foreign pack preserved");
             check(Files.readString(w.resolve("level.dat")).equals("WORLD"), "world data preserved");
             JSONArray active = new JSONArray(Files.readString(w.resolve("world_behavior_packs.json")));
-            check(active.getJSONObject(0).getJSONArray("version").getInt(2) == 15, "world reference upgraded");
+            check(AddonChannel.compare(AddonChannel.version(active.getJSONObject(0).getJSONArray("version")), feed.behaviorVersion) == 0, "world reference upgraded");
             check(active.getJSONObject(0).getString("extra").equals("keep") && active.getJSONObject(1).getString("pack_id").equals("unrelated"), "other references preserved");
             check(Files.exists(w.resolve("behavior_packs/Bodriosafio_BP/scripts/main.js")) && !Files.exists(w.resolve("behavior_packs/embedded")), "embedded pack upgraded");
             check(Files.isDirectory(c.resolve(".bodriosafio_backups")), "backup retained");

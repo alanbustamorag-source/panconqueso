@@ -30,6 +30,16 @@ import java.util.List;
 public final class BodriosafioProfile {
     private BodriosafioProfile() {}
 
+    /** Keep the selected instance while the official installation is present. Ignore removed imports. */
+    static GameVersion forHome(GameVersion selected, List<GameVersion> installed, List<GameVersion> imported) {
+        for (GameVersion game : installed) {
+            if (MinecraftLauncher.MC_PACKAGE_NAME.equals(game.packageName)) {
+                return selected != null && imported.contains(selected) ? selected : game;
+            }
+        }
+        return null;
+    }
+
     private static byte[] asset(Context context, String name, String expected) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (InputStream input = context.getAssets().open("bodriosafio/" + name)) {
@@ -69,11 +79,9 @@ public final class BodriosafioProfile {
     }
 
     public static synchronized void prepareForLaunch(Context context, GameVersion version) throws Exception {
-        ProfileRules.requireNativeVersion(version == null ? null : version.versionCode);
+        ProfileRules.NativeProfile profile = ProfileRules.requireNativeProfile(version == null ? null : version.versionCode);
         log(context, "Inicio: recuperando el perfil y preparando complementos.");
         org.levimc.launcher.bodriosafio.update.AddonUpdateActivity.recoverBeforeLaunch(context, version);
-        if (version == null || !ProfileRules.compatible(version.versionCode))
-            throw new IOException("Versiones objetivo: Minecraft 26.60, 26.62 o 26.63. Versión actual: " + ProfileRules.displayVersion(version == null ? null : version.versionCode));
         if (version.abiList == null || !version.abiList.contains("arm64-v8a"))
             throw new IOException("Esta APK necesita la versión de Minecraft de 64 bits (ARM64).");
         if (version.modsDir == null) throw new IOException("No se encontró el perfil de Minecraft.");
@@ -90,7 +98,7 @@ public final class BodriosafioProfile {
         manifest.put("version", "1.1");
         manifest.put("description", "BuildLimitChanger original de Zeuroux, licencia MIT. Perfil de Bodriosafío incluido.");
         JSONArray versions = new JSONArray();
-        versions.put("26.60").put("26.60.*").put("1.26.60").put("1.26.60.*");
+        versions.put(profile.version).put("1." + profile.version);
         manifest.put("minecraft_versions", versions);
         ProfileRules.atomicWrite(new File(directory, "manifest.json"), manifest.toString(2).getBytes(StandardCharsets.UTF_8));
 
@@ -113,8 +121,8 @@ public final class BodriosafioProfile {
         new Thread(() -> {
             try {
                 if (version == null) throw new IOException("Primero instala Minecraft para seleccionar su perfil.");
-                File addon = new File(context.getCacheDir(), "Bodriosafio_0_3_15.mcaddon");
-                installAsset(context, "Bodriosafio_0_3_15.mcaddon", addon, ProfileRules.ADDON_SHA256);
+                File addon = new File(context.getCacheDir(), "Bodriosafio_0_3_16.mcaddon");
+                installAsset(context, "Bodriosafio_0_3_16.mcaddon", addon, ProfileRules.ADDON_SHA256);
                 List<File> roots = new ArrayList<>();
                 for (boolean external : new boolean[] { false, true }) {
                     File root = LauncherStorage.getStorageGameDataDir(context, MinecraftLauncher.getStorageProfileId(version), version.versionIsolation, external).getCanonicalFile();
@@ -126,9 +134,9 @@ public final class BodriosafioProfile {
     }
 
     private static void importRoot(Context context, File addon, List<File> roots, int index, ImportCallback callback) {
-        if (index == roots.size()) { log(context, "Addon 0.3.15 preparado en ambos almacenamientos del perfil."); callback.success(); return; }
+        if (index == roots.size()) { log(context, "Addon 0.3.16 preparado en ambos almacenamientos del perfil."); callback.success(); return; }
         File gameData = roots.get(index);
-        if (hasPack(new File(gameData, "behavior_packs"), "0c6db7ac-4c6f-4942-bae6-c16b5065036b", new int[] {0, 3, 15})
+        if (hasPack(new File(gameData, "behavior_packs"), "0c6db7ac-4c6f-4942-bae6-c16b5065036b", new int[] {0, 3, 16})
                 && hasPack(new File(gameData, "resource_packs"), "1d763fb9-7cb5-429f-9789-b4b16e2301d1", new int[] {1, 5, 15})) {
             importRoot(context, addon, roots, index + 1, callback); return;
         }
@@ -137,7 +145,7 @@ public final class BodriosafioProfile {
         importer.importPack(Uri.fromFile(addon), new ResourcePackManager.PackOperationCallback() {
             @Override public void onSuccess(String ignored) {
                 importer.shutdown();
-                if (!hasPack(new File(gameData, "behavior_packs"), "0c6db7ac-4c6f-4942-bae6-c16b5065036b", new int[] {0, 3, 15})
+                if (!hasPack(new File(gameData, "behavior_packs"), "0c6db7ac-4c6f-4942-bae6-c16b5065036b", new int[] {0, 3, 16})
                         || !hasPack(new File(gameData, "resource_packs"), "1d763fb9-7cb5-429f-9789-b4b16e2301d1", new int[] {1, 5, 15})) {
                     callback.error("No se encontraron ambos packs después de importarlos. Vuelve a intentarlo."); return;
                 }

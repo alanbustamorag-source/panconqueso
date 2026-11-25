@@ -16,14 +16,19 @@ public class ProfileRulesHostTest {
         check(ProfileRules.compatible("26.62"), "Android stable hotfix");
         check(ProfileRules.compatible("1.26.62.1"), "Android internal hotfix");
         check(ProfileRules.compatible("26.63"), "verified stable release");
+        check(ProfileRules.compatible("1.26.66.1") && ProfileRules.compatible("26.66.1"), "pack updates on the installed Android hotfix");
+        check(!ProfileRules.compatible("1.26.66.10") && !ProfileRules.compatible("26.66.1-preview"), "similar builds are not the identified hotfix");
         check(!ProfileRules.compatible("26.70.26-preview"), "reject preview");
         check(ProfileRules.nativeCompatible("1.26.60.4"), "validated native build");
         check(!ProfileRules.nativeCompatible("1.26.62.1"), "no native offsets on new hotfix");
         check(!ProfileRules.nativeCompatible("1.26.60.5"), "reject different Android native build");
         check(!ProfileRules.nativeCompatible(null), "unknown native build");
         ProfileRules.requireNativeVersion("1.26.60.4");
+        check(ProfileRules.requireNativeProfile("26.66.1") == ProfileRules.NativeProfile.HOTFIX, "26.66.1 selects the signed hotfix module");
+        check(ProfileRules.requireNativeProfile("1.26.66.1") == ProfileRules.NativeProfile.HOTFIX, "internal hotfix version");
+        check(ProfileRules.requireNativeProfile("26.60.4") == ProfileRules.NativeProfile.LEGACY, "preserve 26.60.4");
         check(true, "known native build may prepare");
-        for (String unsupported : new String[] {"26.62", "1.26.63.1", "1.26.60.5", null}) {
+        for (String unsupported : new String[] {"26.62", "1.26.63.1", "1.26.60.5", "26.66.10", "1.26.66.1-preview", null}) {
             boolean nativeRejected = false;
             try { ProfileRules.requireNativeVersion(unsupported); }
             catch (java.io.IOException expected) { nativeRejected = true; }
