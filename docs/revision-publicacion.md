@@ -56,3 +56,20 @@ La causa de la suspensión de la cuenta anterior no se conoce. Las condiciones
 permiten una cuenta personal gratuita por persona y ofrecen un procedimiento
 de apelación. Cambiar nombres de archivos o de repositorio no determina que
 una cuenta nueva cumpla esas condiciones.
+
+## Distribución Android 0.1.6
+
+El propietario cambió el repositorio a público. La APK Android 0.1.6 / 10012
+se publicó en la release `android-0.1.6`, conservando el certificado de
+Bodriosafío. No se incorporó un APK del juego ni su biblioteca `libminecraftpe.so`.
+
+El binario tiene 29.817.109 bytes y SHA-256
+`48d29d3c56bec1f925b655ff5a8b8dbfa59113dbfd3067e07d481c1385fe2494`.
+Se comprobó la descarga anónima usando el código `LauncherChannel`, su tamaño,
+su hash y la comparación de versiones; también pasaron las 49 comprobaciones
+existentes del actualizador sobre esos bytes. El canal `launcher-latest.json`
+anuncia la descarga solo después de publicar el APK. La firma Android se
+comprueba en el workflow de publicación con `apksigner`.
+
+Estos resultados cubren distribución y actualización. La ejecución del juego
+y los módulos nativos en un dispositivo siguen siendo comprobaciones distintas.

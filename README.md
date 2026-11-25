@@ -1,6 +1,6 @@
 # Bodriosafío: launcher completo con módulos nativos
 
-Repositorio privado: alanbustamorag-source/panconqueso.
+Repositorio público de fuentes y actualizaciones: alanbustamorag-source/panconqueso.
 
 **Nether ampliado y Anticombustión nativa son requisitos del launcher.**
 Se retira la propuesta anterior de iniciar una versión reducida con solo el
@@ -18,8 +18,10 @@ Los perfiles no equivalen a una prueba dentro del juego. Hace falta confirmar
 la versión completa instalada del usuario. Las huellas y estados están en
 native-support.json.
 
-Android está preparado como app 0.1.6 / código 10012. **Aún no hay una APK
-nueva compilada y probada.** Windows 0.1.5 tiene compilación automática, pero
+Android 0.1.6 / código 10012 está publicado como APK ARM64 firmado, con
+descarga pública y comprobaciones de integridad del actualizador. La publicación
+no sustituye una prueba de los módulos nativos dentro del juego.
+Windows 0.1.5 tiene compilación automática, pero
 compilar el launcher no adapta sus DLL al motor nuevo ni demuestra que sus
 funciones nativas funcionen dentro de Minecraft.
 
@@ -48,13 +50,18 @@ perfil antiguo no valida un port nuevo ni sustituye una prueba real.
 
 ## Nuevo GitHub y distribución
 
-Los enlaces y sus validaciones de origen usan el nuevo repositorio. La app
-ya instalada conserva el origen antiguo hasta instalar una APK nueva.
+Los enlaces y sus validaciones de origen de Android 0.1.6 usan el nuevo
+repositorio. Las versiones anteriores que conserven el origen antiguo necesitan
+instalar esta APK una vez para cambiar de canal.
 Las claves y tokens siguen fuera del repositorio y de las aplicaciones.
 
-El repo continúa privado. latest.json está preparado, pero los jugadores sin
-acceso no pueden usarlo para descargas automáticas anónimas. Falta resolver
-un destino de distribución después de validar los nativos y la entrega.
+El addon consulta `latest.json` y el launcher Android consulta
+`launcher-latest.json`. La APK se distribuye mediante
+[la publicación Android 0.1.6](https://github.com/alanbustamorag-source/panconqueso/releases/tag/android-0.1.6).
+Ambos canales permiten lectura pública sin credenciales. El actualizador del
+launcher comprueba tamaño, SHA-256, paquete, código de versión y certificado.
+No ofrece reinstalar la misma revisión ni bajar a una anterior; Android pide
+confirmación para instalar una actualización nueva.
 
 ## Comprobaciones
 

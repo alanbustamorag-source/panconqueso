@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "project": "bodriosafio",
+  "kind": "launcher",
+  "platform": "android",
+  "package": "org.levimc.launcher",
+  "version": "0.1.6",
+  "version_code": 10012,
+  "min_android": 28,
+  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.6/Bodriosafio_Launcher_Android_0_1_6.apk",
+  "sha256": "48d29d3c56bec1f925b655ff5a8b8dbfa59113dbfd3067e07d481c1385fe2494",
+  "size": 29817109,
+  "notes": "Launcher Android ARM64 con addon 0.3.15 y canal del nuevo GitHub. Android solicita confirmar la instalación de futuras actualizaciones."
+}

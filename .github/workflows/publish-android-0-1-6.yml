@@ -120,9 +120,11 @@ jobs:
           ).stdout
           digests = {
               digest.lower()
-              for line in signature.splitlines() if line.startswith("Signer")
+              for line in signature.splitlines() if "signer" in line.lower()
               for digest in re.findall(r"certificate SHA-256 digest:\s*([0-9a-fA-F]{64})", line)
           }
+          if not re.search(r"^Number of signers:\s*1\s*$", signature, re.MULTILINE | re.IGNORECASE):
+              raise SystemExit("La APK debe tener un solo firmante")
           print("Certificados Android encontrados: " + ", ".join(sorted(digests)))
           if digests != {"144b63f97269476b81895a3de9ac6ee3172cedde94399f8dae7c2bc4279beb47"}:
               print(signature)
