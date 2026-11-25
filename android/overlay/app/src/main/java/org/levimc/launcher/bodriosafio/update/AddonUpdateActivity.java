@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.levimc.launcher.bodriosafio.BodriosafioProfile;
+import org.levimc.launcher.bodriosafio.DownloadProgressUi;
 import org.levimc.launcher.bodriosafio.ProfileRules;
 import org.levimc.launcher.core.minecraft.MinecraftActivityState;
 import org.levimc.launcher.core.minecraft.MinecraftLauncher;
@@ -34,6 +35,7 @@ public final class AddonUpdateActivity extends Activity {
     private static final int BACKGROUND = Color.rgb(14, 23, 20), SURFACE = Color.rgb(25, 39, 32);
     private static final int ACCENT = Color.rgb(157, 227, 178), WHITE = Color.rgb(234, 243, 237);
     private TextView installed, published, status;
+    private DownloadProgressUi progress;
     private Button update, check, file, bundled;
     private final List<Path> roots = new ArrayList<>();
     private Path cache, journals;
@@ -62,7 +64,7 @@ public final class AddonUpdateActivity extends Activity {
         android.content.Context context = host.getApplicationContext();
         new Thread(() -> {
             try {
-                AddonChannel latest = new AddonChannel(new String(AddonChannel.get(AddonChannel.URL, 128 * 1024), StandardCharsets.UTF_8), "android", "0.1.5");
+                AddonChannel latest = new AddonChannel(new String(AddonChannel.get(AddonChannel.URL, 128 * 1024), StandardCharsets.UTF_8), "android", org.levimc.launcher.BuildConfig.VERSION_NAME);
                 List<Path> roots = gameRoots(context, version);
                 int[] bp = AddonInstaller.installed(roots, 0), rp = AddonInstaller.installed(roots, 1);
                 boolean current = bp != null && rp != null && AddonChannel.compare(bp, latest.behaviorVersion) >= 0 && AddonChannel.compare(rp, latest.resourceVersion) >= 0;
@@ -107,6 +109,7 @@ public final class AddonUpdateActivity extends Activity {
         installed = text(layout, "Versión instalada: comprobando…", 16, false);
         published = text(layout, "Versión disponible: comprobando…", 16, false);
         status = text(layout, "Buscando la última versión…", 15, false);
+        progress = new DownloadProgressUi(this, layout, layout.getChildCount());
         update = button(layout, "Actualizar addon", true); update.setEnabled(false);
         check = button(layout, "Buscar actualizaciones", false);
         file = button(layout, "Actualizar desde un archivo", false);
@@ -123,7 +126,7 @@ public final class AddonUpdateActivity extends Activity {
     private interface Job { String run() throws Exception; }
     private void work(String message, Job job) {
         if (busy) return;
-        busy = true; controls(false); status.setText(message);
+        busy = true; controls(false); status.setVisibility(View.GONE); progress.begin();
         new Thread(() -> {
             String result; boolean success;
             try {
@@ -139,7 +142,8 @@ public final class AddonUpdateActivity extends Activity {
             runOnUiThread(() -> {
                 busy = false;
                 if (isDestroyed() || isFinishing()) return;
-                status.setText(text); controls(true);
+                if (ok) progress.complete(); else progress.hide();
+                status.setText(text); status.setVisibility(View.VISIBLE); controls(true);
                 if (!ok && channel == null) published.setText("Versión disponible: no se pudo comprobar");
                 if (ok) showInstalled();
             });
@@ -155,7 +159,7 @@ public final class AddonUpdateActivity extends Activity {
         if (busy) return;
         channel = null; published.setText("Versión disponible: comprobando…");
         work("Buscando la última versión…", () -> {
-            AddonChannel latest = new AddonChannel(new String(AddonChannel.get(AddonChannel.URL, 128 * 1024), StandardCharsets.UTF_8), "android", "0.1.5");
+            AddonChannel latest = new AddonChannel(new String(AddonChannel.get(AddonChannel.URL, 128 * 1024), StandardCharsets.UTF_8), "android", org.levimc.launcher.BuildConfig.VERSION_NAME);
             channel = latest;
             runOnUiThread(() -> { if (!isDestroyed()) published.setText("Versión disponible: " + latest.version); });
             int[] bp = AddonInstaller.installed(roots, 0), rp = AddonInstaller.installed(roots, 1);
@@ -181,11 +185,12 @@ public final class AddonUpdateActivity extends Activity {
             byte[] bytes = Files.isRegularFile(saved) && Files.size(saved) <= AddonChannel.MAX_ARCHIVE ? Files.readAllBytes(saved) : null;
             if (bytes != null) { try { latest.verify(bytes); } catch (Exception badCache) { bytes = null; } }
             if (bytes == null) {
-                bytes = AddonChannel.get(latest.downloadUrl, latest.size); latest.verify(bytes);
+                bytes = AddonChannel.get(latest.downloadUrl, latest.size, progress::update); latest.verify(bytes);
                 Path temporary = Files.createTempFile(cache, "download-", ".tmp");
                 try { Files.write(temporary, bytes); Files.move(temporary, saved, java.nio.file.StandardCopyOption.REPLACE_EXISTING); }
                 finally { Files.deleteIfExists(temporary); }
             }
+            progress.update(bytes.length, bytes.length);
             try (AddonInstaller.Prepared prepared = AddonInstaller.prepare(bytes, cache)) {
                 if (AddonChannel.compare(prepared.behavior.version, latest.behaviorVersion) != 0 || AddonChannel.compare(prepared.resource.version, latest.resourceVersion) != 0)
                     throw new Exception("La versión descargada no coincide con el canal. No se instaló.");

@@ -1,0 +1,33 @@
+name: Publicar launchers con barras de descarga
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-launchers.yml, distribution/launchers.json]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-launchers
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Obtener fuentes
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Validar los paquetes y contratos existentes
+        run: python3 scripts/validate.py
+      - name: Verificar y publicar las compilaciones firmadas
+        run: python3 scripts/publish_launchers.py

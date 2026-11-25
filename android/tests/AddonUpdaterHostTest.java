@@ -3,6 +3,9 @@ import org.levimc.launcher.bodriosafio.update.AddonInstaller;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
@@ -43,6 +46,31 @@ public final class AddonUpdaterHostTest {
         String text = Files.readString(Paths.get(args[1]));
         Path temp = Files.createTempDirectory("bodrio-test-"), cache = temp.resolve("cache"), journals = temp.resolve("journals");
         AddonChannel feed = new AddonChannel(text, "android", "0.1.5"); feed.verify(bytes); checks++;
+        List<Long> received = new ArrayList<>();
+        byte[] streamed = AddonChannel.read(new ByteArrayInputStream(bytes), bytes.length, bytes.length, (count, total) -> {
+            if (total != bytes.length || (!received.isEmpty() && count < received.get(received.size()-1)))
+                throw new AssertionError("download progress must follow received bytes");
+            received.add(count);
+        });
+        check(Arrays.equals(streamed, bytes), "progress leaves addon bytes unchanged");
+        check(received.get(0) == 0 && received.get(received.size()-1) == bytes.length && received.size() > 2, "incremental download progress");
+        long[] partial = {0};
+        byte[] truncated = AddonChannel.read(new ByteArrayInputStream(bytes, 0, bytes.length-7), bytes.length, bytes.length,
+            (count,total) -> partial[0] = count);
+        check(partial[0] == bytes.length-7, "truncated transfer never reports all bytes");
+        rejects(() -> feed.verify(truncated), "truncated progress cannot pass verification");
+        rejects(() -> AddonChannel.read(new ByteArrayInputStream(bytes), bytes.length-1, bytes.length-1,
+            (count,total) -> { if (count > total) throw new AssertionError("progress exceeded total"); }), "oversize rejected before progress");
+        InputStream interrupted = new InputStream() {
+            int count;
+            @Override public int read() throws IOException { if (++count > 40000) throw new IOException("connection lost"); return 1; }
+        };
+        long[] last = {0};
+        rejects(() -> AddonChannel.read(interrupted, bytes.length, bytes.length, (count,total) -> last[0] = count), "connection loss propagated");
+        check(last[0] > 0 && last[0] < bytes.length, "interrupted transfer keeps partial progress");
+        AddonChannel.read(new ByteArrayInputStream(bytes), bytes.length, -1, (count,total) -> {
+            if (total != -1) throw new AssertionError("unknown transfer size must remain unknown");
+        }); checks++;
         check(feed.version.equals("0.3.15"), "feed version");
         rejects(() -> feed.verify(Arrays.copyOf(bytes, bytes.length - 1)), "truncated download");
         byte[] corrupt = bytes.clone(); corrupt[100] ^= 1;
@@ -51,7 +79,7 @@ public final class AddonUpdaterHostTest {
         rejects(() -> AddonChannel.validateUrl("https://raw.githubusercontent.com/other/repo/main/x"), "foreign repo");
         rejects(() -> AddonChannel.validateUrl("https://raw.githubusercontent.com/alanbustamorag-source/panconqueso/../x"), "URL traversal");
         rejects(() -> AddonChannel.validateUrl("https://raw.githubusercontent.com/alanbustamorag-source/panconqueso/%2e%2e/x"), "encoded URL traversal");
-        rejects(() -> new AddonChannel(text, "android", "0.1.4"), "old launcher");
+        rejects(() -> new AddonChannel(text, "android", "0.0.0"), "old launcher");
         rejects(() -> AddonChannel.version(new JSONArray("[0,3,1.5]")), "fractional version");
         rejects(() -> AddonInstaller.prepare(zip("../escape"), cache), "zip traversal");
         rejects(() -> AddonInstaller.prepare(zip("C:/escape"), cache), "drive path");
@@ -120,4 +148,3 @@ public final class AddonUpdaterHostTest {
         System.out.println("PASS: " + checks + " updater checks: real archives, world references, rollback and recovery");
     }
 }
-

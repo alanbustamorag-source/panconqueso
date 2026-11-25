@@ -134,6 +134,7 @@ public final class LauncherChannel {
     public void copyVerified(InputStream input, OutputStream output, Progress progress) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] buffer = new byte[64 * 1024]; long total = 0; int count;
+        if (progress != null) progress.update(0, size);
         while ((count = input.read(buffer)) != -1) {
             total += count;
             if (total > size) throw new IOException("La descarga supera el tamaño anunciado.");
@@ -152,7 +153,11 @@ public final class LauncherChannel {
         Files.createDirectories(directory.toPath());
         File saved = new File(directory, sha256 + ".apk");
         if (saved.exists()) {
-            try { verify(saved); return saved; } catch (Exception badCache) { Files.deleteIfExists(saved.toPath()); }
+            try {
+                verify(saved);
+                if (progress != null) progress.update(size, size);
+                return saved;
+            } catch (Exception badCache) { Files.deleteIfExists(saved.toPath()); }
         }
         HttpsURLConnection connection = connect(downloadUrl, false);
         File temporary = File.createTempFile("download-", ".part", directory);

@@ -17,7 +17,7 @@ class LoadUncertain : public std::runtime_error {
 public:
     using std::runtime_error::runtime_error;
 };
-struct Progress { std::wstring text; int step; std::wstring detected_version = {}; };
+struct Progress { std::wstring text; int step; std::wstring detected_version = {}; int percent = -1; };
 using Reporter = std::function<void(const Progress&)>;
 struct LaunchResult {
     std::wstring version;

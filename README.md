@@ -18,10 +18,10 @@ Los perfiles no equivalen a una prueba dentro del juego. Hace falta confirmar
 la versión completa instalada del usuario. Las huellas y estados están en
 native-support.json.
 
-Android 0.1.6 / código 10012 está publicado como APK ARM64 firmado, con
+Android 0.1.7 / código 10013 está publicado como APK ARM64 firmado, con
 descarga pública y comprobaciones de integridad del actualizador. La publicación
 no sustituye una prueba de los módulos nativos dentro del juego.
-Windows 0.1.5 tiene compilación automática, pero
+Windows 0.1.6 tiene compilación automática, pero
 compilar el launcher no adapta sus DLL al motor nuevo ni demuestra que sus
 funciones nativas funcionen dentro de Minecraft.
 
@@ -50,14 +50,14 @@ perfil antiguo no valida un port nuevo ni sustituye una prueba real.
 
 ## Nuevo GitHub y distribución
 
-Los enlaces y sus validaciones de origen de Android 0.1.6 usan el nuevo
+Los enlaces y sus validaciones de origen de Android 0.1.7 usan el nuevo
 repositorio. Las versiones anteriores que conserven el origen antiguo necesitan
 instalar esta APK una vez para cambiar de canal.
 Las claves y tokens siguen fuera del repositorio y de las aplicaciones.
 
 El addon consulta `latest.json` y el launcher Android consulta
 `launcher-latest.json`. La APK se distribuye mediante
-[la publicación Android 0.1.6](https://github.com/alanbustamorag-source/panconqueso/releases/tag/android-0.1.6).
+[la publicación Android 0.1.7](https://github.com/alanbustamorag-source/panconqueso/releases/tag/android-0.1.7).
 Ambos canales permiten lectura pública sin credenciales. El actualizador del
 launcher comprueba tamaño, SHA-256, paquete, código de versión y certificado.
 No ofrece reinstalar la misma revisión ni bajar a una anterior; Android pide
@@ -69,3 +69,15 @@ Ejecutar python3 scripts/validate.py. Los resultados reales están en
 validation/resultados.json. Las comprobaciones del host y la compilación
 Windows no prueban el arranque, el Nether ampliado ni el efecto nativo dentro
 de Minecraft.
+
+## Barras de descarga
+
+Android 0.1.7 y Windows 0.1.6 muestran una barra con porcentaje al actualizar
+el addon o el launcher. El porcentaje avanza con los bytes recibidos y llega
+a 100 después de comprobar y guardar el archivo. Los reintentos empiezan de cero.
+La pantalla Android de inicio de Minecraft muestra el porcentaje y conserva
+el registro técnico para consultar errores.
+
+Las compilaciones se publican como `android-0.1.7` y `windows-0.1.6`.
+Las pruebas de descarga cubren interrupciones, archivos incompletos y límites
+de tamaño. Falta comprobar la interfaz en los equipos de los jugadores.

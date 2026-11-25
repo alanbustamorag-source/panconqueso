@@ -22,6 +22,11 @@ jobs:
       - name: Validar paquetes y pruebas del host
         run: python3 scripts/validate.py
 
+      - name: Comprobar progreso de descarga y recuperación del addon
+        run: |
+          curl --fail --location --retry 2 https://repo.maven.apache.org/maven2/org/json/json/20240303/json-20240303.jar --output "$RUNNER_TEMP/bodrio-json.jar"
+          python3 scripts/test_downloads.py "$RUNNER_TEMP/bodrio-json.jar"
+
       - name: Instalar compilador Windows
         run: |
           sudo apt-get update
@@ -35,10 +40,10 @@ jobs:
       - name: Conservar compilación y resultados para revisión
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: Bodriosafio-Windows-0.1.5-preparacion
+          name: Bodriosafio-Windows-0.1.6-preparacion
           if-no-files-found: error
           retention-days: 14
           path: |
-            windows/build/Bodriosafio_Launcher_Windows_0_1_5.exe
+            windows/build/Bodriosafio_Launcher_Windows_0_1_6.exe
             windows/build/launcher-windows-latest.json
             validation/resultados.json

@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import org.levimc.launcher.bodriosafio.BodriosafioProfile;
+import org.levimc.launcher.bodriosafio.DownloadProgressUi;
 import org.levimc.launcher.core.minecraft.MinecraftActivityState;
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -29,6 +30,7 @@ public final class LauncherSelfUpdate {
     private static WeakReference<LauncherSelfUpdate> active = new WeakReference<>(null);
     private final WeakReference<Activity> owner;
     private final Button button;
+    private final DownloadProgressUi progress;
     private final Context app;
     private final File cache;
     private volatile boolean busy;
@@ -37,8 +39,9 @@ public final class LauncherSelfUpdate {
     private boolean permissionReturn;
     private long promptedCode = -1;
 
-    private LauncherSelfUpdate(Activity host, Button target) {
+    private LauncherSelfUpdate(Activity host, Button target, DownloadProgressUi progress) {
         owner = new WeakReference<>(host); button = target;
+        this.progress = progress;
         app = host.getApplicationContext();
         cache = new File(app.getCacheDir(), "bodriosafio-launcher-updates");
         button.setOnClickListener(view -> {
@@ -74,7 +77,8 @@ public final class LauncherSelfUpdate {
         target.setPadding(margin, margin, margin, margin);
         LinearLayout.LayoutParams parameters = new LinearLayout.LayoutParams(-1, -2); parameters.topMargin = margin;
         layout.addView(target, after < 0 ? layout.getChildCount() : after, parameters);
-        LauncherSelfUpdate controller = new LauncherSelfUpdate(host, target);
+        DownloadProgressUi progress = new DownloadProgressUi(host, layout, layout.indexOfChild(target) + 1);
+        LauncherSelfUpdate controller = new LauncherSelfUpdate(host, target, progress);
         active = new WeakReference<>(controller);
         controller.check(true);
     }
@@ -173,20 +177,16 @@ public final class LauncherSelfUpdate {
         LauncherChannel channel = available;
         if (busy || channel == null) return;
         busy = true; button.setEnabled(false); button.setText("Descargando launcher…");
+        progress.begin();
         new Thread(() -> {
             try {
-                long[] last = {0};
-                File file = channel.download(cache, (downloaded, total) -> {
-                    long now = android.os.SystemClock.elapsedRealtime();
-                    if (now - last[0] < 500 && downloaded != total) return;
-                    last[0] = now; label("Descargando launcher · " + downloaded * 100 / total + "%");
-                });
+                File file = channel.download(cache, progress::update);
                 LauncherApkVerifier.verify(app, channel, file);
                 log("APK " + channel.version + ", revisión " + channel.versionCode + ": hash, paquete y firma comprobados.");
-                ui(() -> { busy = false; button.setEnabled(true); prepared = file; button.setText("Instalar actualización del launcher"); promptWhenVisible(); });
+                ui(() -> { progress.complete(); busy = false; button.setEnabled(true); prepared = file; button.setText("Instalar actualización del launcher"); promptWhenVisible(); });
             } catch (Exception error) {
                 log(error.toString());
-                ui(() -> { busy = false; button.setEnabled(true); button.setText("Reintentar actualización del launcher"); message("No se pudo actualizar", error.getMessage()); });
+                ui(() -> { progress.hide(); busy = false; button.setEnabled(true); button.setText("Reintentar actualización del launcher"); message("No se pudo actualizar", error.getMessage()); });
             }
         }, "bodriosafio-launcher-download").start();
     }

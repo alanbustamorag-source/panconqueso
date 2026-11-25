@@ -142,7 +142,7 @@ fs::path extract(unsigned id, const std::wstring& filename, const char* expected
     auto bytes=resource(id);
     if (expected && sha256(bytes)!=expected) throw std::runtime_error("El archivo incluido no coincide con su SHA-256. No se cargó.");
     auto root=data_root();
-    auto dir=root/L"runtime"/L"0.1.5";
+    auto dir=root/L"runtime"/L"0.1.6";
     fs::create_directories(dir);
     // Limit ACL additions to our own new folders, never the whole AppData tree.
     allow_packaged_read(root.parent_path(),true);
@@ -445,7 +445,7 @@ LaunchResult prepare_running_game(DWORD pid, const Reporter& report,const std::f
     return {version.raw,config,loaded,changed,version.display,true};
 }
 LaunchResult launch_and_prepare(const Reporter& report, const std::function<bool()>& cancelled) {
-    log_line(L"Bodriosafio Launcher 0.1.5 | Perfil Minecraft 26.60.5 | Nether y Anticombustión | Inicio solicitado por el usuario.");
+    log_line(L"Bodriosafio Launcher 0.1.6 | Perfil Minecraft 26.60.5 | Nether y Anticombustión | Inicio solicitado por el usuario.");
     report({L"Buscando Minecraft…",0});
     DWORD pid=find_game();
     if (!pid) {
@@ -480,14 +480,15 @@ struct InternetHandle {
     InternetHandle(const InternetHandle&)=delete;
     InternetHandle& operator=(const InternetHandle&)=delete;
 };
-std::string download_channel_file(const std::string& url, size_t limit, const std::function<bool()>& cancelled) {
+std::string download_channel_file(const std::string& url, size_t limit, const std::function<bool()>& cancelled,
+        const std::function<void(int)>& progress = {}) {
     validate_update_url(url);
     std::wstring address=wide(url);
     URL_COMPONENTS parts{};parts.dwStructSize=sizeof(parts);parts.dwHostNameLength=static_cast<DWORD>(-1);parts.dwUrlPathLength=static_cast<DWORD>(-1);
     if(!WinHttpCrackUrl(address.c_str(),static_cast<DWORD>(address.size()),0,&parts) || parts.nScheme!=INTERNET_SCHEME_HTTPS)
         throw std::runtime_error("La URL del canal no es válida.");
     std::wstring host(parts.lpszHostName,parts.dwHostNameLength),path(parts.lpszUrlPath,parts.dwUrlPathLength);
-    InternetHandle session(WinHttpOpen(L"Bodriosafio-Launcher/0.1.5",WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,WINHTTP_NO_PROXY_NAME,WINHTTP_NO_PROXY_BYPASS,0));
+    InternetHandle session(WinHttpOpen(L"Bodriosafio-Launcher/0.1.6",WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,WINHTTP_NO_PROXY_NAME,WINHTTP_NO_PROXY_BYPASS,0));
     if(!session.h) fail(L"No se pudo iniciar la descarga");
     WinHttpSetTimeouts(session.h,5000,5000,10000,10000);
     InternetHandle connection(WinHttpConnect(session.h,host.c_str(),parts.nPort,0));
@@ -503,6 +504,8 @@ std::string download_channel_file(const std::string& url, size_t limit, const st
     if(!WinHttpQueryHeaders(request.h,WINHTTP_QUERY_STATUS_CODE|WINHTTP_QUERY_FLAG_NUMBER,WINHTTP_HEADER_NAME_BY_INDEX,&status,&bytes,WINHTTP_NO_HEADER_INDEX)) fail(L"No se pudo comprobar la respuesta del canal");
     if(status!=200) throw std::runtime_error("El canal de actualizaciones devolvió HTTP "+std::to_string(status)+".");
     std::string result; ULONGLONG started=GetTickCount64();
+    int last_percent=0;
+    if(progress) progress(0);
     while(true) {
         if(cancelled()) throw std::runtime_error("Actualización cancelada.");
         if(GetTickCount64()-started>120000) throw std::runtime_error("La descarga tardó demasiado. Vuelve a intentarlo.");
@@ -514,6 +517,11 @@ std::string download_channel_file(const std::string& url, size_t limit, const st
         if(!WinHttpReadData(request.h,buffer.data(),static_cast<DWORD>(buffer.size()),&received)) fail(L"No se pudo completar la descarga");
         if(!received) break;
         result.append(buffer.data(),received);
+        if(progress) {
+            // Completion is reported only after integrity checks have passed.
+            int percent=static_cast<int>(std::min<size_t>(99,result.size()*100/limit));
+            if(percent!=last_percent) {last_percent=percent;progress(percent);}
+        }
     }
     return result;
 }
@@ -538,13 +546,15 @@ std::wstring update_addon(const Reporter& report, const std::function<bool()>& c
     }
     if(!cached) {
         report({L"Descargando Bodriosafío "+wide(channel.version)+L"…",1,{}});
-        auto bytes=download_channel_file(channel.url,static_cast<size_t>(channel.size),cancelled);
-        report({L"Verificando el archivo descargado…",2,{}});
+        auto bytes=download_channel_file(channel.url,static_cast<size_t>(channel.size),cancelled,
+            [&](int percent) {report({L"",1,{},percent});});
+        report({L"Verificando el archivo descargado…",2,{},
+            static_cast<int>(std::min<size_t>(99,bytes.size()*100/channel.size))});
         if(bytes.size()!=channel.size || sha256(bytes)!=channel.sha256) throw std::runtime_error("La descarga está incompleta o no coincide con la versión publicada. No se importó.");
         atomic_write(path,bytes);
     }
     if(cancelled()) throw std::runtime_error("Actualización cancelada.");
-    report({L"Abriendo la importación en Minecraft…",3,{}});
+    report({L"Abriendo la importación en Minecraft…",3,{},99});
     auto result=reinterpret_cast<INT_PTR>(ShellExecuteW(nullptr,L"open",path.c_str(),nullptr,nullptr,SW_SHOWNORMAL));
     if(result<=32) throw std::runtime_error("Windows no tiene asociada la importación de .mcaddon con Minecraft. El archivo verificado quedó en la carpeta updates del launcher.");
     log_line(L"Addon "+wide(channel.version)+L" descargado y verificado. Se abrió el importador de Minecraft; el launcher no confirma su finalización.");
@@ -602,12 +612,13 @@ LauncherUpdate prepare_launcher_update(const Reporter& report,const std::functio
     }
     if(!cached) {
         report({L"Descargando launcher "+wide(release.version)+L"…",1,{}});
-        auto bytes=download_channel_file(release.url,static_cast<size_t>(release.size),cancelled);
+        auto bytes=download_channel_file(release.url,static_cast<size_t>(release.size),cancelled,
+            [&](int percent) {report({L"",1,{},percent});});
         if(bytes.size()!=release.size || sha256(bytes)!=release.sha256) throw std::runtime_error("La descarga del launcher está incompleta o no coincide con la versión publicada.");
         if(cancelled()) throw std::runtime_error("Actualización cancelada.");
         atomic_write(path,bytes);validate_launcher_file(path,release.sha256,release.version);
     }
-    report({L"Actualización del launcher verificada.",3,{}});
+    report({L"Actualización del launcher verificada.",3,{},100});
     return {path,release.version,release.sha256,true};
 }
 void install_launcher_update(const LauncherUpdate& update) {

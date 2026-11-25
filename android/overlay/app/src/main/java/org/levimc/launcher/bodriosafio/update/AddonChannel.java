@@ -57,7 +57,14 @@ public final class AddonChannel {
                 || !uri.normalize().getPath().equals(uri.getPath())) throw new IOException("La descarga no pertenece al canal de Bodriosafío.");
     }
 
+    public interface Progress { void update(long received, long total); }
+
     public static byte[] get(String value, long limit) throws Exception {
+        return get(value, limit, null);
+    }
+
+    /** For an archive, limit is the exact size announced by its verified channel. */
+    public static byte[] get(String value, long limit, Progress progress) throws Exception {
         for (int redirects = 0; redirects < 4; redirects++) {
             validateUrl(value);
             HttpsURLConnection connection = (HttpsURLConnection) new URL(value).openConnection();
@@ -73,17 +80,25 @@ public final class AddonChannel {
                 if (status != 200) throw new IOException("No se pudo descargar la actualización (HTTP " + status + ").");
                 long length = connection.getContentLengthLong();
                 if (length > limit) throw new IOException("La descarga supera el tamaño permitido.");
-                try (InputStream input = connection.getInputStream()) { return read(input, limit); }
+                try (InputStream input = connection.getInputStream()) {
+                    return read(input, limit, progress == null ? length : limit, progress);
+                }
             } finally { connection.disconnect(); }
         }
         throw new IOException("El canal devolvió demasiadas redirecciones.");
     }
 
     public static byte[] read(InputStream input, long limit) throws IOException {
+        return read(input, limit, -1, null);
+    }
+
+    public static byte[] read(InputStream input, long limit, long total, Progress progress) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream(); byte[] buffer = new byte[16384]; int count;
+        if (progress != null) progress.update(0, total);
         while ((count = input.read(buffer)) != -1) {
             if (output.size() + (long) count > limit) throw new IOException("El archivo supera el tamaño permitido.");
             output.write(buffer, 0, count);
+            if (progress != null) progress.update(output.size(), total);
         }
         return output.toByteArray();
     }

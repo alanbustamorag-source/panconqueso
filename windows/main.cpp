@@ -27,6 +27,8 @@ bool received_launch_version=false;
 bool updating_addon=false;
 bool updating_launcher=false;
 int stage=0;
+int download_percent=-1;
+bool show_download=false;
 struct Update {
     std::wstring text;
     int step=0;
@@ -36,6 +38,7 @@ struct Update {
     bool addon=false;
     bool launcher=false;
     std::shared_ptr<bodrio::LauncherUpdate> launcher_update={};
+    int percent=-1;
 };
 int px(int value) { return static_cast<int>(value*scale+0.5f); }
 RECT box(int x,int y,int w,int h) { return {px(x),px(y),px(x+w),px(y+h)}; }
@@ -76,6 +79,8 @@ void inspect_version(HWND destination) {
 }
 void set_busy(bool value) {
     busy=value;
+    if(value && (updating_addon || updating_launcher)) SetTimer(window_handle,1,50,nullptr);
+    else KillTimer(window_handle,1);
     EnableWindow(play_button,!value && !uncertain_load);
     EnableWindow(GetDlgItem(window_handle,addon_id),!value);
     EnableWindow(GetDlgItem(window_handle,launcher_id),!value);
@@ -86,6 +91,7 @@ void start() {
     if (busy || uncertain_load) return;
     if (worker.joinable()) worker.join();
     cancel_requested=false; has_error=false; prepared=false;
+    show_download=false;download_percent=-1;stage=0;
     set_busy(true);
     worker=std::thread([] {
         try {
@@ -117,11 +123,12 @@ void show_error(const std::exception& e) {
 void start_addon_update() {
     if(busy) return;
     if(worker.joinable()) worker.join();
-    cancel_requested=false;has_error=false;updating_addon=true;set_busy(true);
+    cancel_requested=false;has_error=false;updating_addon=true;show_download=true;download_percent=-1;stage=0;set_busy(true);
     worker=std::thread([] {
         try {
             auto message=bodrio::update_addon([](const bodrio::Progress& p) {
-                send(new Update{p.text,p.step,false,false,{},false,true});
+                auto update=new Update{p.text,p.step,false,false,{},false,true};
+                update->percent=p.percent;send(update);
             },[]{return cancel_requested.load();});
             send(new Update{message,4,true,true,{},false,true});
         } catch(const std::exception& error) {
@@ -133,13 +140,13 @@ void start_addon_update() {
 void start_launcher_update() {
     if(busy) return;
     if(worker.joinable()) worker.join();
-    cancel_requested=false;has_error=false;updating_launcher=true;set_busy(true);
+    cancel_requested=false;has_error=false;updating_launcher=true;show_download=true;download_percent=-1;stage=0;set_busy(true);
     worker=std::thread([] {
         try {
             auto release=std::make_shared<bodrio::LauncherUpdate>(bodrio::prepare_launcher_update([](const bodrio::Progress& p) {
-                auto u=new Update{};u->text=p.text;u->step=p.step;u->launcher=true;send(u);
+                auto u=new Update{};u->text=p.text;u->step=p.step;u->launcher=true;u->percent=p.percent;send(u);
             },[]{return cancel_requested.load();}));
-            auto u=new Update{};u->text=release->available?L"Nueva versión del launcher preparada.":L"El launcher 0.1.5 ya está actualizado.";
+            auto u=new Update{};u->text=release->available?L"Nueva versión del launcher preparada.":L"El launcher 0.1.6 ya está actualizado.";
             u->step=4;u->finished=true;u->success=true;u->launcher=true;u->launcher_update=release;send(u);
         } catch(const std::exception& e) {
             auto u=new Update{};u->text=bodrio::explain_exception(e);u->finished=true;u->launcher=true;
@@ -168,8 +175,19 @@ void paint(HDC dc) {
     text(dc,L"Versiones objetivo: 26.60 / 26.62 / 26.63",box(53,252,730,27),body_font,white);
     text(dc,L"Versión actual: "+detected,box(53,284,730,27),body_font,white);
     auto status_area=box(33,351,780,64);
-    text(dc,status,status_area,body_font,has_error ? RGB(255,191,159) : white);
-    if (busy) {
+    if(!(busy && show_download)) text(dc,status,status_area,body_font,has_error ? RGB(255,191,159) : white);
+    if(show_download) {
+        text(dc,download_percent<0 ? L"…" : std::to_wstring(download_percent)+L"%",
+             box(32,401,784,24),body_font,white,DT_RIGHT|DT_VCENTER|DT_SINGLELINE);
+        rounded(dc,box(32,430,784,6),border,6);
+        if(download_percent>=0) {
+            int width=784*download_percent/100;
+            if(width>0) rounded(dc,box(32,430,width,6),green,6);
+        } else {
+            int offset=static_cast<int>((GetTickCount64()/4)%624);
+            rounded(dc,box(32+offset,430,160,6),green,6);
+        }
+    } else if (busy) {
         auto track=box(32,430,784,4); rounded(dc,track,border,4);
         int w=std::max(35,(stage+1)*156); if(w>784) w=784;
         rounded(dc,box(32,430,w,4),green,4);
@@ -203,7 +221,7 @@ LRESULT CALLBACK proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
             case credits_id: bodrio::show_credits(); break;
             case help_id:
                 MessageBoxW(hwnd,
-                    L"Bodriosafío Launcher\nVersión 0.1.5 · Anticombustión integrada\n\n"
+                    L"Bodriosafío Launcher\nVersión 0.1.6 · Anticombustión integrada\n\n"
                     L"Minecraft objetivo: 26.60 / 26.62 / 26.63 (Windows x64). Los módulos nativos son obligatorios; los hotfix nuevos están pendientes de adaptación.\n\n"
                     L"Jugar abre Minecraft y prepara automáticamente el Nether y Anticombustión.\n"
                     L"Actualizar addon busca la última versión, verifica la descarga y abre su importación en Minecraft.\n"
@@ -227,6 +245,7 @@ LRESULT CALLBACK proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
     case update_message: {
         std::unique_ptr<Update> update(reinterpret_cast<Update*>(lp));
         stage=update->step;
+        if(update->percent>=0) download_percent=std::clamp(update->percent,0,100);
         status=update->text;
         if (!update->version.empty()) {
             detected=update->version;
@@ -235,6 +254,10 @@ LRESULT CALLBACK proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
         if (update->finished) {
             if (worker.joinable()) worker.join();
             has_error=!update->success;
+            if(show_download) {
+                if(update->success) download_percent=100;
+                else {show_download=false;download_percent=-1;}
+            }
             if(!update->addon && !update->launcher) {prepared=update->success;uncertain_load=update->uncertain;}
             updating_addon=false;updating_launcher=false;
             set_busy(false);
@@ -299,6 +322,9 @@ LRESULT CALLBACK proc(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp) {
         BitBlt(dc,0,0,client.right,client.bottom,memory,0,0,SRCCOPY);
         SelectObject(memory,old);DeleteObject(bitmap);DeleteDC(memory);EndPaint(hwnd,&ps);return 0;
     }
+    case WM_TIMER:
+        if(wp==1 && busy && show_download && download_percent<0) InvalidateRect(hwnd,nullptr,FALSE);
+        return 0;
     case WM_ERASEBKGND: return 1;
     case WM_CLOSE:
         if(busy) { close_after_work=true;cancel_requested=true;status=L"Terminando la operación en curso…";InvalidateRect(hwnd,nullptr,FALSE);return 0; }

@@ -1,12 +1,12 @@
-# Android 0.1.6 / 10012: nativos obligatorios
+# Android 0.1.7 / 10013: nativos obligatorios
 
 El overlay se aplica sobre el proyecto completo 0.1.5 r7; no es un proyecto
 Gradle independiente. El canal nuevo es alanbustamorag-source/panconqueso.
 
 ## Publicación y actualizaciones
 
-La APK firmada 0.1.6 / 10012 se descarga desde la release `android-0.1.6`.
-`launcher-latest.json` contiene su tamaño y SHA-256 reales. El código 10012 no
+La APK firmada 0.1.7 / 10013 se descarga desde la release `android-0.1.7`.
+`launcher-latest.json` contiene su tamaño y SHA-256 reales. El código 10013 no
 se ofrece como actualización de sí mismo: las entregas siguientes deben aumentar
 `version_code` y conservar la misma clave de firma. El addon usa su propio
 `latest.json`. La comprobación de distribución no valida los nativos en el juego.
@@ -37,3 +37,7 @@ compila ni publica una APK.
 Antes de firmar una entrega, completar el port sobre la compilación exacta
 y probar los módulos dentro del juego. Mantener la misma clave de firma fuera
 del repositorio para conservar la posibilidad de actualizar la app existente.
+
+Las descargas del addon y del launcher incluyen una barra y porcentaje.
+La carga de Minecraft muestra el porcentaje; los detalles técnicos quedan
+en el registro. La actualización conserva la firma y la identidad existentes.

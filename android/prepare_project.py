@@ -49,15 +49,15 @@ for file in (HERE / 'overlay').rglob('*'):
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(file, target)
 
-(output / 'PREPARACION_0_1_6.json').write_text(json.dumps(CONFIG, ensure_ascii=False, indent=2) + '\n')
-(output / 'PREPARACION_0_1_6.md').write_text(
-    '# Android 0.1.6 / 10012: fuentes preparadas\n\n'
+(output / 'PREPARACION_0_1_7.json').write_text(json.dumps(CONFIG, ensure_ascii=False, indent=2) + '\n')
+(output / 'PREPARACION_0_1_7.md').write_text(
+    '# Android 0.1.7 / 10013: fuentes preparadas\n\n'
     'Origen migrado a alanbustamorag-source/panconqueso.\n'
     'Nativos obligatorios; la adaptación del hotfix objetivo exige el binario exacto.\n'
     'No se ha generado una APK ni se ha usado una clave de firma.\n'
     'Antes de distribuir: verificar la procedencia de las dependencias,\n'
     'compilar, probar en el dispositivo y firmar fuera de GitHub.\n'
-    'La distribución automática sigue pendiente de un destino accesible a jugadores.\n')
+    'La distribución firmada usa el canal launcher-latest.json del repositorio.\n')
 print(json.dumps({'prepared_project': str(output), 'version': CONFIG['version'],
                   'version_code': CONFIG['version_code'], 'apk_built': False,
                   'keys_copied': False, 'status': CONFIG['apk_distribution_status']}, ensure_ascii=False))

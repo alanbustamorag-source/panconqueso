@@ -10,7 +10,7 @@ python3 scripts/update_checksums.py
 common=(-std=c++17 -O2 -Wall -Wextra -Werror -Wno-cast-function-type -static -static-libgcc -static-libstdc++ -municode -D_WIN32_WINNT=0x0A00)
 libraries=(-luser32 -lgdi32 -ldwmapi -lshell32 -lole32 -ladvapi32 -lbcrypt -lversion -luuid -lwinhttp)
 "$resource_compiler" -I . --preprocessor "$compiler" --preprocessor-arg=-E --preprocessor-arg=-xc --preprocessor-arg=-DRC_INVOKED launcher.rc -O coff -o "$output/resources.o"
-"$compiler" "${common[@]}" -mwindows main.cpp backend.cpp "$output/resources.o" "${libraries[@]}" -Wl,--no-insert-timestamp,--dynamicbase,--nxcompat -o "$output/Bodriosafio_Launcher_Windows_0_1_5.exe"
+"$compiler" "${common[@]}" -mwindows main.cpp backend.cpp "$output/resources.o" "${libraries[@]}" -Wl,--no-insert-timestamp,--dynamicbase,--nxcompat -o "$output/Bodriosafio_Launcher_Windows_0_1_6.exe"
 for unit in profile channel integrated effects_readiness; do
     "$host_compiler" -std=c++17 -O2 -Wall -Wextra -Werror "test_$unit.cpp" -o "$output/test_$unit"
 done
@@ -18,4 +18,4 @@ done
 "$output/test_channel" tests/latest_0_3_13.json
 "$output/test_integrated" assets/BodriosafioEffects.dll
 "$output/test_effects_readiness"
-python3 scripts/write_feed.py "$output/Bodriosafio_Launcher_Windows_0_1_5.exe"
+python3 scripts/write_feed.py "$output/Bodriosafio_Launcher_Windows_0_1_6.exe"

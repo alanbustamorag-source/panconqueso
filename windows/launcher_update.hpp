@@ -3,7 +3,7 @@
 #include <filesystem>
 
 namespace bodrio {
-inline constexpr const char* launcher_version="0.1.5";
+inline constexpr const char* launcher_version="0.1.6";
 inline constexpr const char* included_addon_version="0.3.15";
 inline constexpr const char* launcher_update_url="https://raw.githubusercontent.com/alanbustamorag-source/panconqueso/main/launcher-windows-latest.json";
 inline bool use_included_addon(const std::string& published) {
