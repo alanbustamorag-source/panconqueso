@@ -44,6 +44,24 @@ def fetch(sha):
     return data
 
 
+def restore_android_release(item, saved):
+    patch = item['patch']
+    patch_name = patch['file']
+    if Path(patch_name).name != patch_name or not patch_name.endswith('.patch.zst'):
+        raise ValueError('Invalid launcher patch filename')
+    patch_file = ROOT / 'distribution' / 'patches' / patch_name
+    if hashlib.sha256(patch_file.read_bytes()).hexdigest() != patch['sha256']:
+        raise ValueError('Unexpected launcher patch digest')
+    base = WORK / patch['base_name']
+    if base.parent != WORK or not re.fullmatch(r'android-[0-9.]+', patch['base_tag']):
+        raise ValueError('Invalid Android base release')
+    gh('release', 'download', patch['base_tag'], '--pattern', base.name, '--dir', str(WORK), check=True)
+    if hashlib.sha256(base.read_bytes()).hexdigest() != patch['base_sha256']:
+        raise ValueError('Unexpected Android base APK')
+    subprocess.run(['zstd', '-q', '-d', '--long=26', '--patch-from=' + str(base),
+                    str(patch_file), '-o', str(saved)], check=True)
+
+
 # Recover and verify every artifact before publishing either release.
 for item in manifest['files']:
     name = item['name']
@@ -54,6 +72,8 @@ for item in manifest['files']:
     present = state.returncode == 0 and any(a['name'] == name for a in json.loads(state.stdout)['assets'])
     if present:
         gh('release', 'download', item['tag'], '--pattern', name, '--dir', str(WORK), check=True)
+    elif item['platform'] == 'android' and 'patch' in item:
+        restore_android_release(item, saved)
     else:
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
             with saved.open('wb') as output:
@@ -67,8 +87,8 @@ for item in manifest['files']:
         if any(Path(n).name.lower() in ('libminecraftpe.so', 'minecraft.windows.exe') for n in archive.namelist()):
             raise ValueError('Game binaries cannot be published')
         if item['platform'] == 'android':
-            addon = archive.read('assets/bodriosafio/Bodriosafio_0_3_15.mcaddon')
-            if hashlib.sha256(addon).hexdigest() != '900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3':
+            addon = archive.read('assets/bodriosafio/' + item['addon_name'])
+            if hashlib.sha256(addon).hexdigest() != item['addon_sha256']:
                 raise ValueError('Unexpected included addon')
         else:
             exe = archive.read('Bodriosafio_Launcher_Windows_0_1_6.exe')
@@ -93,7 +113,11 @@ for item in manifest['files']:
     saved = WORK / item['name']
     notes = WORK / (item['platform'] + '-notes.md')
     notes.write_text(item['notes'] + '\n\nSHA-256: `' + item['sha256'] + '`\n')
-    exists = gh('release', 'view', item['tag']).returncode == 0
+    state = gh('release', 'view', item['tag'], '--json', 'isDraft')
+    exists = state.returncode == 0
+    if exists and item['present'] and not json.loads(state.stdout)['isDraft']:
+        print(item['tag'] + ': already published')
+        continue
     if exists:
         if not item['present']:
             gh('release', 'upload', item['tag'], str(saved), check=True)

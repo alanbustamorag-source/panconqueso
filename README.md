@@ -16,9 +16,7 @@ no debe desactivar los módulos ni anunciar una preparación exitosa.
 
 Android 0.1.9 (10015) selecciona los dos módulos según la versión de Minecraft, comprueba la huella del motor ARM64 y conserva las barras de descarga. Incluye el addon 0.3.16 con el evento de consumo de la píldora. La prueba en un teléfono sigue pendiente. Las huellas están en `native-support.json`.
 
-Android 0.1.7 / código 10013 está publicado como APK ARM64 firmado, con
-descarga pública y comprobaciones de integridad del actualizador. La publicación
-no sustituye una prueba de los módulos nativos dentro del juego.
+El canal de actualización de Android está en `launcher-latest.json`. La publicación 0.1.9 (10015) ofrece la APK ARM64 firmada y el addon 0.3.16. En una red Wi-Fi sin límite de datos la descarga se inicia al abrir el launcher. Android pide confirmar la instalación.
 Windows 0.1.6 tiene compilación automática, pero
 compilar el launcher no adapta sus DLL al motor nuevo ni demuestra que sus
 funciones nativas funcionen dentro de Minecraft.

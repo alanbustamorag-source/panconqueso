@@ -1,15 +1,11 @@
-# Android 0.1.9 (10015), versión de prueba
+# Android 0.1.9 (10015)
 
 El overlay se aplica sobre el proyecto completo 0.1.5 r7; no es un proyecto
 Gradle independiente. El canal nuevo es alanbustamorag-source/panconqueso.
 
 ## Publicación y actualizaciones
 
-La APK firmada 0.1.7 / 10013 se descarga desde la release `android-0.1.7`.
-`launcher-latest.json` contiene su tamaño y SHA-256 reales. El código 10013 no
-se ofrece como actualización de sí mismo: las entregas siguientes deben aumentar
-`version_code` y conservar la misma clave de firma. El addon usa su propio
-`latest.json`. La comprobación de distribución no valida los nativos en el juego.
+La APK firmada 0.1.9 (10015) se publica en la release `android-0.1.9`. El workflow comprueba el archivo y la firma antes de anunciar esta versión en `launcher-latest.json`. La descarga automática utiliza redes sin límite de datos y Android solicita confirmar la instalación. El addon tiene su propio canal en `latest.json`.
 
 ## Compatibilidad de las fuentes del overlay
 
