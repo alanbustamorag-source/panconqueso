@@ -30,6 +30,16 @@ import java.util.List;
 public final class BodriosafioProfile {
     private BodriosafioProfile() {}
 
+    /** Keep the selected instance while the official installation is present. Ignore removed imports. */
+    static GameVersion forHome(GameVersion selected, List<GameVersion> installed, List<GameVersion> imported) {
+        for (GameVersion game : installed) {
+            if (MinecraftLauncher.MC_PACKAGE_NAME.equals(game.packageName)) {
+                return selected != null && imported.contains(selected) ? selected : game;
+            }
+        }
+        return null;
+    }
+
     private static byte[] asset(Context context, String name, String expected) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (InputStream input = context.getAssets().open("bodriosafio/" + name)) {
@@ -72,8 +82,6 @@ public final class BodriosafioProfile {
         ProfileRules.requireNativeVersion(version == null ? null : version.versionCode);
         log(context, "Inicio: recuperando el perfil y preparando complementos.");
         org.levimc.launcher.bodriosafio.update.AddonUpdateActivity.recoverBeforeLaunch(context, version);
-        if (version == null || !ProfileRules.compatible(version.versionCode))
-            throw new IOException("Versiones objetivo: Minecraft 26.60, 26.62 o 26.63. Versión actual: " + ProfileRules.displayVersion(version == null ? null : version.versionCode));
         if (version.abiList == null || !version.abiList.contains("arm64-v8a"))
             throw new IOException("Esta APK necesita la versión de Minecraft de 64 bits (ARM64).");
         if (version.modsDir == null) throw new IOException("No se encontró el perfil de Minecraft.");

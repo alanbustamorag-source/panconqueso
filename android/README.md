@@ -1,4 +1,4 @@
-# Android 0.1.7 / 10013: nativos obligatorios
+# Android 0.1.8 (10014), versión de prueba
 
 El overlay se aplica sobre el proyecto completo 0.1.5 r7; no es un proyecto
 Gradle independiente. El canal nuevo es alanbustamorag-source/panconqueso.
@@ -16,7 +16,9 @@ se ofrece como actualización de sí mismo: las entregas siguientes deben aument
 Nether y Anticombustión nativos son requisitos. nativeCompatible conserva
 solo el perfil de motor 1.26.60.4. Otras compilaciones se rechazan antes de
 preparar los módulos o modificar su estado. No se cambia a una edición de
-solo addon. El port de 26.62 requiere verificar el motor exacto.
+solo addon. En 26.66.1 se identificó el motor ARM64 y se habilitó el actualizador del addon. La adaptación de Anticombustión para ejecutar el juego sigue pendiente.
+
+La pantalla principal utiliza el perfil que el jugador ya seleccionó en Herramientas. Para abrir el juego con un perfil importado de 26.60.4 también se necesita la instalación oficial de Google Play.
 
 Las fuentes del módulo ARM64 están en native-effects. No se distribuye
 libminecraftpe.so ni se eliminan los controles de la copia oficial del juego.
@@ -27,7 +29,7 @@ por sí solo una infracción.
 ## Preparar la base completa
 
 ~~~bash
-python3 android/prepare_project.py /ruta/Bodriosafio_Launcher_Android_0_1_5_Fuentes.zip --output /ruta/nueva/Android_0_1_6
+python3 android/prepare_project.py /ruta/Bodriosafio_Launcher_Android_0_1_5_Fuentes.zip --output /ruta/nueva/Android_0_1_8
 ~~~
 
 El script comprueba el SHA-256 y las rutas, aplica el overlay y conserva la

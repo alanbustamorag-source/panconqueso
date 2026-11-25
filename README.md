@@ -11,12 +11,10 @@ no debe desactivar los módulos ni anunciar una preparación exitosa.
 
 | Plataforma | Perfil nativo estudiado | Actualización objetivo |
 | --- | --- | --- |
-| Android ARM64 | Motor identificado como 1.26.60.4 | 26.62: falta verificar el motor exacto y adaptar los nativos |
+| Android ARM64 | Motor identificado como 1.26.60.4 | 1.26.66.1 identificado, adaptación nativa pendiente |
 | Windows x64 | Motor identificado como 1.26.60.5 | 26.63: falta verificar el ejecutable exacto y adaptar los nativos |
 
-Los perfiles no equivalen a una prueba dentro del juego. Hace falta confirmar
-la versión completa instalada del usuario. Las huellas y estados están en
-native-support.json.
+La APK de prueba Android 0.1.8 (10014) permite actualizar el addon en 26.66.1 y respeta el perfil seleccionado en Herramientas. Jugar con los dos módulos requiere el perfil ARM64 26.60.4. Las huellas de ambos motores están en `native-support.json`.
 
 Android 0.1.7 / código 10013 está publicado como APK ARM64 firmado, con
 descarga pública y comprobaciones de integridad del actualizador. La publicación

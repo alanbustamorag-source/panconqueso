@@ -77,11 +77,14 @@ def inspect(path):
         machine, identifier = build_id(engine)
     if machine != 183:
         raise ValueError('El motor no es ARM64/AArch64.')
-    matches = [p for p in support['profiles'] if p['platform'] == 'android'
-               and p['engine_sha256'] == digest and p.get('engine_build_id') == identifier]
+    def matching_versions(entries):
+        return [p['minecraft'] for p in entries if p['platform'] == 'android'
+                and p.get('engine_sha256') == digest and p.get('engine_build_id') == identifier]
+
     return {'platform': 'android', 'architecture': 'arm64-v8a', 'engine_bytes': size,
             'engine_sha256': digest, 'engine_build_id': identifier,
-            'matching_profile_versions': [p['minecraft'] for p in matches],
+            'matching_profile_versions': matching_versions(support['profiles']),
+            'matching_pending_versions': matching_versions(support['pending_targets']),
             'new_native_port_verified': False, 'gameplay_tested': False,
             'game_binary_exported': False}
 

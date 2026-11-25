@@ -43,7 +43,7 @@ public class BodriosafioActivity extends BaseActivity {
     private TextView actualVersion, status;
     private Button play, addon;
     private GameVersion installed;
-    private boolean ready, importing;
+    private boolean ready;
 
     @Override protected boolean shouldSkipNavBar() { return true; }
 
@@ -74,8 +74,8 @@ public class BodriosafioActivity extends BaseActivity {
         LinearLayout card = new LinearLayout(this); card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(dp(20), dp(18), dp(20), dp(18)); card.setBackground(rounded(SURFACE, 18));
         card.addView(label("MINECRAFT", 12, MUTED, false));
-        add(card, label("Versiones objetivo: 26.60 / 26.62 / 26.63", 16, WHITE, false), 12, 0);
-        actualVersion = label("Versión actual: Buscando…", 16, WHITE, false);
+        add(card, label("Versión con módulos nativos: " + ProfileRules.NATIVE_VERSION, 16, WHITE, false), 12, 0);
+        actualVersion = label("Perfil seleccionado: buscando…", 16, WHITE, false);
         add(card, actualVersion, 8, 0); add(content, card, 6, 0);
         status = label("Buscando tu instalación de Minecraft…", 15, WHITE, false);
         add(content, status, 22, 16);
@@ -113,18 +113,26 @@ public class BodriosafioActivity extends BaseActivity {
         ready = false; play.setEnabled(false); addon.setEnabled(false);
         VersionManager.initializeAsync(this, manager -> {
             if (reload) manager.reload();
-            GameVersion found = null;
-            for (GameVersion candidate : manager.getInstalledVersions()) {
-                if (MinecraftLauncher.MC_PACKAGE_NAME.equals(candidate.packageName)) { found = candidate; break; }
-            }
-            if (found != null) manager.selectVersion(found);
-            final GameVersion result = found;
+            GameVersion selected = manager.getSelectedVersion();
+            GameVersion result = BodriosafioProfile.forHome(selected, manager.getInstalledVersions(), manager.getCustomVersions());
+            if (result != null && selected != result) manager.selectVersion(result);
             runOnUiThread(() -> {
                 if (isDestroyed() || isFinishing()) return;
                 installed = result; ready = true;
-                actualVersion.setText("Versión actual: " + (result == null ? "No encontrado" : ProfileRules.displayVersion(result.versionCode)));
-                status.setText(result == null ? "Instala tu copia de Minecraft desde Google Play para comenzar." : "Pulsa Jugar para iniciar Minecraft.");
-                play.setEnabled(true); addon.setEnabled(result != null);
+                String version = result == null ? null : result.versionCode;
+                boolean canPlay = ProfileRules.nativeCompatible(version);
+                actualVersion.setText("Perfil seleccionado: " + ProfileRules.displayVersion(version));
+                if (result == null) {
+                    status.setText("Instala tu copia de Minecraft desde Google Play para comenzar.");
+                } else if (canPlay) {
+                    status.setText("Pulsa Jugar para iniciar Minecraft.");
+                } else {
+                    status.setText("Los módulos nativos aún no están adaptados a este perfil. Si ya importaste Minecraft "
+                            + ProfileRules.NATIVE_VERSION + ", puedes elegirlo en Herramientas.");
+                }
+                play.setEnabled(canPlay);
+                play.setAlpha(canPlay ? 1f : .55f);
+                addon.setEnabled(ProfileRules.compatible(version));
                 org.levimc.launcher.bodriosafio.update.AddonUpdateActivity.checkHome(this, result, addon);
             });
         });
@@ -133,18 +141,13 @@ public class BodriosafioActivity extends BaseActivity {
     @Override protected void onResume() {
         super.onResume();
         org.levimc.launcher.bodriosafio.update.LauncherSelfUpdate.resume(this);
-        if (ready && !importing && play != null && !org.levimc.launcher.core.minecraft.LaunchPreparation.isBusy()) {
-            String current = null;
-            try { current = getPackageManager().getPackageInfo(MinecraftLauncher.MC_PACKAGE_NAME, 0).versionName; }
-            catch (android.content.pm.PackageManager.NameNotFoundException ignored) { }
-            String previous = installed == null ? null : installed.versionCode;
-            if (!java.util.Objects.equals(current, previous)) refreshInstallation(true);
-            else play.setEnabled(true);
+        if (ready && play != null && !org.levimc.launcher.core.minecraft.LaunchPreparation.isBusy()) {
+            refreshInstallation(true);
         }
     }
 
     private void startGame() {
-        if (!ready || importing) return;
+        if (!ready) return;
         if (installed == null) {
             showText("Minecraft no encontrado", "Instala Minecraft Bedrock desde Google Play. Esta APK no incluye el juego."); return;
         }
@@ -175,17 +178,14 @@ public class BodriosafioActivity extends BaseActivity {
         org.levimc.launcher.bodriosafio.update.AddonUpdateActivity.open(this, installed);
     }
 
-    private void completeImport(String error) {
-        runOnUiThread(() -> {
-            if (isDestroyed() || isFinishing()) return;
-            importing = false; play.setEnabled(true); addon.setEnabled(true);
-            status.setText(error == null ? "Addon importado. Activa sus packs en el mundo que vayas a usar." : "No se pudo importar el addon.");
-            if (error != null) showText("Error al importar", error);
-        });
-    }
-
     private void help() {
-        showText("Ayuda", "Bodriosafío Launcher\nVersión 0.1.7\n\nMinecraft objetivo: 26.60 / 26.62 / 26.63. Los módulos nativos son obligatorios; los hotfix nuevos necesitan completar su adaptación.\nIncluye Anticombustión nativa experimental para ARM64 1.26.60.4.\nAndroid 9 o posterior · ARM64.\n\nJugar prepara el complemento incluido y abre tu copia instalada de Minecraft.\nActualizar launcher busca su versión en GitHub. Con Wi-Fi descarga las novedades; Android te pide confirmar la instalación. Con datos móviles, pulsa el botón para descargar.\n\nActualizar addon busca la última versión publicada, verifica la descarga y actualiza los packs de este perfil. Cierra Minecraft antes de actualizar.\n\nNecesita Minecraft instalado desde Google Play. No incluye el juego.\nLos mundos y ajustes de este launcher se guardan por separado de la app habitual. Herramientas permite importar tus mundos y gestionar el contenido.\n\nLas descargas muestran una barra con porcentaje. Los detalles técnicos se consultan en Registro.");
+        showText("Ayuda", "Bodriosafío Launcher " + org.levimc.launcher.BuildConfig.VERSION_NAME
+                + "\n\nJugar requiere el perfil ARM64 " + ProfileRules.NATIVE_VERSION
+                + " para cargar el Nether ampliado y Anticombustión. Puedes seleccionar una copia importada en Herramientas."
+                + "\n\nEn Minecraft 26.66.1 puedes actualizar los packs del perfil. El arranque con los dos módulos aún está pendiente para esa versión."
+                + "\n\nActualizar addon descarga y verifica los packs. Cierra Minecraft antes de actualizarlos."
+                + "\n\nActualizar launcher busca nuevas versiones en GitHub. Por Wi-Fi se descargan automáticamente. Android te pide confirmar la instalación."
+                + "\n\nNecesitas Minecraft instalado desde Google Play. Los mundos se guardan en el perfil que elijas.");
     }
 
     private void showLog() {
@@ -194,7 +194,10 @@ public class BodriosafioActivity extends BaseActivity {
             byte[] bytes = file.isFile() ? Files.readAllBytes(file.toPath()) : new byte[0];
             String value = new String(bytes, StandardCharsets.UTF_8);
             if (value.length() > 24000) value = value.substring(value.length() - 24000);
-            showText("Registro", NativeEffectsProfile.appendStatus(this, value.isEmpty() ? "Todavía no hay eventos registrados." : value));
+            if (value.isEmpty()) value = "Todavía no hay eventos registrados.";
+            if (installed != null && ProfileRules.nativeCompatible(installed.versionCode))
+                value = NativeEffectsProfile.appendStatus(this, value);
+            showText("Registro", value, true);
         } catch (Exception error) { showText("Registro", error.getMessage()); }
     }
 
@@ -207,10 +210,15 @@ public class BodriosafioActivity extends BaseActivity {
     }
 
     private void showText(String title, String message) {
+        showText(title, message, false);
+    }
+
+    private void showText(String title, String message, boolean scrollToEnd) {
         TextView body = new TextView(this); body.setText(message == null ? "Sin detalles." : message);
         body.setTextSize(15); body.setTextIsSelectable(true); body.setPadding(dp(24), dp(12), dp(24), dp(20));
         ScrollView scroll = new ScrollView(this); scroll.addView(body);
         new AlertDialog.Builder(this).setTitle(title).setView(scroll).setPositiveButton("Aceptar", null).show();
+        if (scrollToEnd) scroll.post(() -> scroll.fullScroll(View.FOCUS_DOWN));
     }
 
     private int dp(int value) { return Math.round(value * getResources().getDisplayMetrics().density); }
