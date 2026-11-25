@@ -4,11 +4,11 @@
   "kind": "launcher",
   "platform": "android",
   "package": "org.levimc.launcher",
-  "version": "0.1.6",
-  "version_code": 10012,
+  "version": "0.1.7",
+  "version_code": 10013,
   "min_android": 28,
-  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.6/Bodriosafio_Launcher_Android_0_1_6.apk",
-  "sha256": "48d29d3c56bec1f925b655ff5a8b8dbfa59113dbfd3067e07d481c1385fe2494",
-  "size": 29817109,
-  "notes": "Launcher Android ARM64 con addon 0.3.15 y canal del nuevo GitHub. Android solicita confirmar la instalación de futuras actualizaciones."
+  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.7/Bodriosafio_Launcher_Android_0_1_7.apk",
+  "sha256": "5cd2b0e798558592ee91dd9a823fea6bca4776d409f90e541961ac00998afde7",
+  "size": 29813013,
+  "notes": "Launcher Android 0.1.7 (revisión 10013), ARM64, Android 9 o posterior. Barra y porcentaje para descargar el addon y las actualizaciones del launcher. Inicio de Minecraft con porcentaje y registro técnico oculto. Mantiene el addon 0.3.15 y el certificado de firma habitual. Compilación y verificaciones completadas; pendiente de prueba en el dispositivo."
 }
