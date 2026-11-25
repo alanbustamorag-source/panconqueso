@@ -74,7 +74,7 @@ public class BodriosafioActivity extends BaseActivity {
         LinearLayout card = new LinearLayout(this); card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(dp(20), dp(18), dp(20), dp(18)); card.setBackground(rounded(SURFACE, 18));
         card.addView(label("MINECRAFT", 12, MUTED, false));
-        add(card, label("Versión con módulos nativos: " + ProfileRules.NATIVE_VERSION, 16, WHITE, false), 12, 0);
+        add(card, label("Perfiles con módulos nativos: " + ProfileRules.NATIVE_VERSIONS, 16, WHITE, false), 12, 0);
         actualVersion = label("Perfil seleccionado: buscando…", 16, WHITE, false);
         add(card, actualVersion, 8, 0); add(content, card, 6, 0);
         status = label("Buscando tu instalación de Minecraft…", 15, WHITE, false);
@@ -127,8 +127,8 @@ public class BodriosafioActivity extends BaseActivity {
                 } else if (canPlay) {
                     status.setText("Pulsa Jugar para iniciar Minecraft.");
                 } else {
-                    status.setText("Los módulos nativos aún no están adaptados a este perfil. Si ya importaste Minecraft "
-                            + ProfileRules.NATIVE_VERSION + ", puedes elegirlo en Herramientas.");
+                    status.setText("Selecciona un perfil de Minecraft " + ProfileRules.NATIVE_VERSIONS
+                            + " en Herramientas para usar los módulos nativos.");
                 }
                 play.setEnabled(canPlay);
                 play.setAlpha(canPlay ? 1f : .55f);
@@ -180,9 +180,8 @@ public class BodriosafioActivity extends BaseActivity {
 
     private void help() {
         showText("Ayuda", "Bodriosafío Launcher " + org.levimc.launcher.BuildConfig.VERSION_NAME
-                + "\n\nJugar requiere el perfil ARM64 " + ProfileRules.NATIVE_VERSION
+                + "\n\nJugar admite los perfiles ARM64 " + ProfileRules.NATIVE_VERSIONS
                 + " para cargar el Nether ampliado y Anticombustión. Puedes seleccionar una copia importada en Herramientas."
-                + "\n\nEn Minecraft 26.66.1 puedes actualizar los packs del perfil. El arranque con los dos módulos aún está pendiente para esa versión."
                 + "\n\nActualizar addon descarga y verifica los packs. Cierra Minecraft antes de actualizarlos."
                 + "\n\nActualizar launcher busca nuevas versiones en GitHub. Por Wi-Fi se descargan automáticamente. Android te pide confirmar la instalación."
                 + "\n\nNecesitas Minecraft instalado desde Google Play. Los mundos se guardan en el perfil que elijas.");
@@ -196,7 +195,7 @@ public class BodriosafioActivity extends BaseActivity {
             if (value.length() > 24000) value = value.substring(value.length() - 24000);
             if (value.isEmpty()) value = "Todavía no hay eventos registrados.";
             if (installed != null && ProfileRules.nativeCompatible(installed.versionCode))
-                value = NativeEffectsProfile.appendStatus(this, value);
+                value = NativeEffectsProfile.appendStatus(this, value, installed);
             showText("Registro", value, true);
         } catch (Exception error) { showText("Registro", error.getMessage()); }
     }

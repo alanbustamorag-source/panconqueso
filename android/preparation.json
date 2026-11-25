@@ -2,11 +2,14 @@
   "source_archive": "Bodriosafio_Launcher_Android_0_1_5_Fuentes.zip",
   "source_archive_sha256": "eda0b320d0a91e94a2176870159b33ef2f0ac852dac19d63a1cd36b535be5cf0",
   "base_version": "0.1.5-r7",
-  "version": "0.1.8",
-  "version_code": 10014,
+  "version": "0.1.9",
+  "version_code": 10015,
   "repository": "alanbustamorag-source/panconqueso",
   "android_target": "26.66.1",
-  "apk_distribution_status": "test_build_pack_updates_and_profile_selection",
+  "apk_distribution_status": "signed_test_build_pending_device_validation",
   "native_required": true,
-  "fallback_to_addon_only": false
+  "fallback_to_addon_only": false,
+  "effects_release_url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.6/Bodriosafio_Launcher_Android_0_1_6.apk",
+  "effects_release_sha256": "48d29d3c56bec1f925b655ff5a8b8dbfa59113dbfd3067e07d481c1385fe2494",
+  "effects_26_66_1_sha256": "c04b70ae7dbbad199e485a2a8b1cce6ea43d6a8e4d424327ee2baa77aa894209"
 }

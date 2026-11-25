@@ -3,6 +3,7 @@ package org.levimc.launcher.bodriosafio;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -14,10 +15,40 @@ import java.util.List;
 
 /** Bodriosafio-specific profile logic. No Android dependencies, so it can be tested on the build host. */
 public final class ProfileRules {
-    public static final String NATIVE_VERSION = "26.60.4";
+    public static final String NATIVE_VERSIONS = "26.60.4 y 26.66.1";
+    public enum NativeProfile {
+        LEGACY("26.60.4", "6c7b409d832e182537c0b1dbb8cc3c92f60b7795db7ea5e9f626fb6d6cb8c77f",
+                "libBodriosafioEffects.so", "ff71ce36891acb8298eb949472d63cdc69e90632852251512344d60b9c6acfa7", "0.1.0"),
+        HOTFIX("26.66.1", "3c24bf3a20471be41449f1e5cd9354c657995468e412d1631d9828b3f3824892",
+                "26.66.1/libBodriosafioEffects.so", "c04b70ae7dbbad199e485a2a8b1cce6ea43d6a8e4d424327ee2baa77aa894209", "0.1.1");
+
+        public final String version, engineSha256, effectsAsset, effectsSha256, effectsVersion;
+
+        NativeProfile(String version, String engineSha256, String effectsAsset, String effectsSha256, String effectsVersion) {
+            this.version = version;
+            this.engineSha256 = engineSha256;
+            this.effectsAsset = effectsAsset;
+            this.effectsSha256 = effectsSha256;
+            this.effectsVersion = effectsVersion;
+        }
+
+        public void verifyEngine(File engine) throws IOException {
+            if (engine == null || !engine.isFile()) throw new IOException("No se encontró el motor de Minecraft " + version + ".");
+            try (FileInputStream input = new FileInputStream(engine)) {
+                MessageDigest hash = MessageDigest.getInstance("SHA-256");
+                byte[] block = new byte[256 * 1024];
+                int count;
+                while ((count = input.read(block)) != -1) hash.update(block, 0, count);
+                if (!engineSha256.equals(hex(hash.digest())))
+                    throw new IOException("El motor instalado no coincide con el perfil ARM64 de Minecraft " + version + ".");
+            } catch (java.security.NoSuchAlgorithmException unavailable) {
+                throw new IOException("No se pudo verificar el motor de Minecraft.", unavailable);
+            }
+        }
+    }
     public static final String MOD_ID = "bodriosafio_nether";
     public static final String NATIVE_SHA256 = "4791a3d41884a4c49bc6ba02327684433ede70a8ef03fc3a351c01f321b97a17";
-    public static final String ADDON_SHA256 = "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3";
+    public static final String ADDON_SHA256 = "41c85c8da165240a2c6e3c4b5a33fcff7fbdc679745d5cfd4636ea02b75f798d";
     private ProfileRules() {}
 
     /** Versions accepted by the pack updater, including the installed Android hotfix. */
@@ -28,16 +59,25 @@ public final class ProfileRules {
             || name.equals("26.66.1") || name.equals("1.26.66.1");
     }
 
-    /** Native offsets are validated only for this exact Android build. */
+    public static NativeProfile nativeProfile(String version) {
+        for (NativeProfile profile : NativeProfile.values()) {
+            if (profile.version.equals(version) || ("1." + profile.version).equals(version)) return profile;
+        }
+        return null;
+    }
+
     public static boolean nativeCompatible(String version) {
-        return NATIVE_VERSION.equals(version) || ("1." + NATIVE_VERSION).equals(version);
+        return nativeProfile(version) != null;
+    }
+
+    public static NativeProfile requireNativeProfile(String version) throws IOException {
+        NativeProfile profile = nativeProfile(version);
+        if (profile == null) throw new IOException("Falta un perfil nativo para Minecraft " + displayVersion(version) + ".");
+        return profile;
     }
 
     public static void requireNativeVersion(String version) throws IOException {
-        if (!nativeCompatible(version)) {
-            throw new IOException("Los módulos nativos de Bodriosafío todavía no están adaptados a Minecraft "
-                + displayVersion(version) + ". La preparación requiere Nether y Anticombustión nativos; no se sustituirán por modo addon.");
-        }
+        requireNativeProfile(version);
     }
 
     public static String displayVersion(String version) {
@@ -53,14 +93,17 @@ public final class ProfileRules {
 
     public static String sha256(byte[] bytes) throws IOException {
         try {
-            byte[] digest = MessageDigest.getInstance("SHA-256").digest(bytes);
-            StringBuilder result = new StringBuilder(64);
-            for (byte item : digest) {
-                int n = item & 255;
-                result.append(Character.forDigit(n >>> 4, 16)).append(Character.forDigit(n & 15, 16));
-            }
-            return result.toString();
+            return hex(MessageDigest.getInstance("SHA-256").digest(bytes));
         } catch (Exception error) { throw new IOException("No se pudo verificar el archivo.", error); }
+    }
+
+    private static String hex(byte[] bytes) {
+        StringBuilder result = new StringBuilder(bytes.length * 2);
+        for (byte item : bytes) {
+            int n = item & 255;
+            result.append(Character.forDigit(n >>> 4, 16)).append(Character.forDigit(n & 15, 16));
+        }
+        return result.toString();
     }
 
     private static String clean(String line) {

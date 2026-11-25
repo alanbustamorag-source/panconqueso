@@ -75,7 +75,7 @@ public final class AddonUpdateActivity extends Activity {
                 if (activity != null) activity.runOnUiThread(() -> {
                     Button button = control.get();
                     if (button != null && button.getTag() == request && !activity.isDestroyed() && !activity.isFinishing())
-                        button.setText(current ? "Addon al día · " + latest.version : "Actualizar addon · " + latest.version);
+                        button.setText(current ? "Addon al día · " + AddonChannel.display(bp) : "Actualizar addon · " + latest.version);
                 });
             } catch (Exception error) { BodriosafioProfile.log(context, "No se pudo comprobar el addon al abrir: " + error.getMessage()); }
         }, "bodriosafio-addon-check").start();
@@ -118,7 +118,7 @@ public final class AddonUpdateActivity extends Activity {
         update = button(layout, "Actualizar addon", true); update.setEnabled(false);
         check = button(layout, "Buscar actualizaciones", false);
         file = button(layout, "Actualizar desde un archivo", false);
-        bundled = button(layout, "Usar versión incluida (0.3.15)", false);
+        bundled = button(layout, "Usar versión incluida (0.3.16)", false);
         Button back = button(layout, "Volver", false);
         update.setOnClickListener(v -> download());
         check.setOnClickListener(v -> refresh());
@@ -227,7 +227,7 @@ public final class AddonUpdateActivity extends Activity {
     private void installBundled() {
         work("Preparando la versión incluida…", () -> {
             byte[] bytes;
-            try (InputStream input = getAssets().open("bodriosafio/Bodriosafio_0_3_15.mcaddon")) { bytes = AddonChannel.read(input, AddonChannel.MAX_ARCHIVE); }
+            try (InputStream input = getAssets().open("bodriosafio/Bodriosafio_0_3_16.mcaddon")) { bytes = AddonChannel.read(input, AddonChannel.MAX_ARCHIVE); }
             if (!ProfileRules.ADDON_SHA256.equals(AddonChannel.digest(bytes))) throw new Exception("No se pudo verificar el addon incluido.");
             try (AddonInstaller.Prepared prepared = AddonInstaller.prepare(bytes, cache)) { return new AddonInstaller().install(prepared, roots, journals); }
         });

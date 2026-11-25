@@ -1,4 +1,4 @@
-# Android 0.1.8 (10014), versión de prueba
+# Android 0.1.9 (10015), versión de prueba
 
 El overlay se aplica sobre el proyecto completo 0.1.5 r7; no es un proyecto
 Gradle independiente. El canal nuevo es alanbustamorag-source/panconqueso.
@@ -13,12 +13,9 @@ se ofrece como actualización de sí mismo: las entregas siguientes deben aument
 
 ## Compatibilidad de las fuentes del overlay
 
-Nether y Anticombustión nativos son requisitos. nativeCompatible conserva
-solo el perfil de motor 1.26.60.4. Otras compilaciones se rechazan antes de
-preparar los módulos o modificar su estado. No se cambia a una edición de
-solo addon. En 26.66.1 se identificó el motor ARM64 y se habilitó el actualizador del addon. La adaptación de Anticombustión para ejecutar el juego sigue pendiente.
+Jugar exige el Nether ampliado y Anticombustión. El launcher comprueba el motor ARM64 para 26.60.4 y 26.66.1 antes de cargar sus módulos. También respeta el perfil seleccionado en Herramientas y conserva el requisito de Minecraft instalado desde Google Play.
 
-La pantalla principal utiliza el perfil que el jugador ya seleccionó en Herramientas. Para abrir el juego con un perfil importado de 26.60.4 también se necesita la instalación oficial de Google Play.
+La biblioteca de Anticombustión para 26.66.1 procede de la APK firmada `android-0.1.6`. Las pruebas del módulo se encuentran en el commit `9774daeffb58d429af3f66e5f96f197248cb6644`. La APK 0.1.9 incorpora el addon 0.3.16. El registro dentro de un mundo en el teléfono sigue pendiente.
 
 Las fuentes del módulo ARM64 están en native-effects. No se distribuye
 libminecraftpe.so ni se eliminan los controles de la copia oficial del juego.
@@ -29,10 +26,10 @@ por sí solo una infracción.
 ## Preparar la base completa
 
 ~~~bash
-python3 android/prepare_project.py /ruta/Bodriosafio_Launcher_Android_0_1_5_Fuentes.zip --output /ruta/nueva/Android_0_1_8
+python3 android/prepare_project.py /ruta/Bodriosafio_Launcher_Android_0_1_5_Fuentes.zip --output /ruta/nueva/Android_0_1_9
 ~~~
 
-El script comprueba el SHA-256 y las rutas, aplica el overlay y conserva la
+Para trabajar sin red, añade `--native-release-apk /ruta/Bodriosafio_Launcher_Android_0_1_6.apk`. Por defecto se descarga esa publicación de GitHub. El script comprueba el SHA-256 de la APK y su biblioteca, verifica las rutas, aplica el overlay y conserva la
 identidad de la app. No copia claves, no ejecuta workflows heredados y no
 compila ni publica una APK.
 

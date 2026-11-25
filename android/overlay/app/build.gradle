@@ -45,8 +45,8 @@ android {
         applicationId "org.levimc.launcher"
         minSdkVersion 28
         targetSdkVersion 35
-        versionCode 10014
-        versionName "0.1.8"
+        versionCode 10015
+        versionName "0.1.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "CURSEFORGE_API_KEY", "\"${localProperties.getProperty('curseforge.api_key', '')}\""
         ndk {

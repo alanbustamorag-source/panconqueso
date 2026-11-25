@@ -1,0 +1,26 @@
+{
+  "filename": "Bodriosafio_Launcher_Android_0_1_9.apk",
+  "sha256": "5331504675660ba560102cd69c0c6f7578c81df890c83f75cc0db6ca38803191",
+  "size_bytes": 29829494,
+  "version_name": "0.1.9",
+  "version_code": 10015,
+  "package": "org.levimc.launcher",
+  "certificate_sha256": "144b63f97269476b81895a3de9ac6ee3172cedde94399f8dae7c2bc4279beb47",
+  "signature_v3_verified": true,
+  "zip_alignment_verified": true,
+  "game_profiles": [
+    "26.60.4",
+    "26.66.1"
+  ],
+  "engine_pair_checks": 6,
+  "android_profile_checks": 56,
+  "profile_selection_checks": 6,
+  "addon_version": "0.3.16",
+  "resource_pack_version": "1.5.15",
+  "addon_sha256": "41c85c8da165240a2c6e3c4b5a33fcff7fbdc679745d5cfd4636ea02b75f798d",
+  "simulated_pill_gameplay_checks": 20,
+  "addon_installation_and_download_checks": 48,
+  "signed_apk_updater_checks": 49,
+  "native_library_source": "android-0.1.6 release",
+  "gameplay_on_android_device_tested": false
+}
