@@ -4,11 +4,11 @@
   "kind": "launcher",
   "platform": "android",
   "package": "org.levimc.launcher",
-  "version": "0.1.7",
-  "version_code": 10013,
+  "version": "0.1.9",
+  "version_code": 10015,
   "min_android": 28,
-  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.7/Bodriosafio_Launcher_Android_0_1_7.apk",
-  "sha256": "5cd2b0e798558592ee91dd9a823fea6bca4776d409f90e541961ac00998afde7",
-  "size": 29813013,
-  "notes": "Launcher Android 0.1.7 (revisión 10013), ARM64, Android 9 o posterior. Barra y porcentaje para descargar el addon y las actualizaciones del launcher. Inicio de Minecraft con porcentaje y registro técnico oculto. Mantiene el addon 0.3.15 y el certificado de firma habitual. Compilación y verificaciones completadas; pendiente de prueba en el dispositivo."
+  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.9/Bodriosafio_Launcher_Android_0_1_9.apk",
+  "sha256": "5331504675660ba560102cd69c0c6f7578c81df890c83f75cc0db6ca38803191",
+  "size": 29829494,
+  "notes": "Minecraft Android 26.66.1 y 26.60.4 con Nether ampliado y Anticombustión. Incluye el addon 0.3.16 con la corrección de la pastilla, conserva las barras de descarga y la firma habitual. La prueba dentro de un mundo en un teléfono sigue pendiente."
 }
