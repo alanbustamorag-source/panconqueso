@@ -74,7 +74,7 @@ public class BodriosafioActivity extends BaseActivity {
         LinearLayout card = new LinearLayout(this); card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(dp(20), dp(18), dp(20), dp(18)); card.setBackground(rounded(SURFACE, 18));
         card.addView(label("MINECRAFT", 12, MUTED, false));
-        add(card, label("Versiones objetivo: 26.60 / 26.62 / 26.63", 16, WHITE, false), 12, 0);
+        add(card, label("Minecraft 26.66 · Nether y Anticombustión", 16, WHITE, false), 12, 0);
         actualVersion = label("Versión actual: Buscando…", 16, WHITE, false);
         add(card, actualVersion, 8, 0); add(content, card, 6, 0);
         status = label("Buscando tu instalación de Minecraft…", 15, WHITE, false);
@@ -185,7 +185,7 @@ public class BodriosafioActivity extends BaseActivity {
     }
 
     private void help() {
-        showText("Ayuda", "Bodriosafío Launcher\nVersión 0.1.6 · PREPARACIÓN\n\nMinecraft objetivo: 26.60 / 26.62 / 26.63. Los módulos nativos son obligatorios; los hotfix nuevos necesitan completar su adaptación.\nIncluye Anticombustión nativa experimental para ARM64 1.26.60.4.\nAndroid 9 o posterior · ARM64.\n\nJugar prepara el complemento incluido y abre tu copia instalada de Minecraft.\nActualizar launcher busca su versión en GitHub. Con Wi-Fi descarga las novedades; Android te pide confirmar la instalación. Con datos móviles, pulsa el botón para descargar.\n\nActualizar addon busca la última versión publicada, verifica la descarga y actualiza los packs de este perfil. Cierra Minecraft antes de actualizar.\n\nNecesita Minecraft instalado desde Google Play. No incluye el juego.\nLos mundos y ajustes de este launcher se guardan por separado de la app habitual. Herramientas permite importar tus mundos y gestionar el contenido.\n\nLa compatibilidad real con tu teléfono necesita una primera prueba.");
+        showText("Ayuda", "Bodriosafío Launcher\nVersión 0.1.6 · Prueba para Minecraft 26.66\n\nMinecraft objetivo: 26.66 para Android de 64 bits. Incluye Nether ampliado y Anticombustión nativa.\nNecesita la compilación de Minecraft 26.66 compatible con esta versión del launcher.\nAndroid 9 o posterior · ARM64.\n\nJugar prepara el complemento incluido y abre tu copia instalada de Minecraft.\nActualizar launcher busca su versión en GitHub. Con Wi-Fi descarga las novedades; Android te pide confirmar la instalación. Con datos móviles, pulsa el botón para descargar.\n\nActualizar addon busca la última versión publicada, verifica la descarga y actualiza los packs de este perfil. Cierra Minecraft antes de actualizar.\n\nNecesita Minecraft instalado desde Google Play. No incluye el juego.\nLos mundos y ajustes de este launcher se guardan por separado de la app habitual. Herramientas permite importar tus mundos y gestionar el contenido.\n\nLa compatibilidad real con tu teléfono necesita una primera prueba.");
     }
 
     private void showLog() {

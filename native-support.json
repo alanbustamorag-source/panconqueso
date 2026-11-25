@@ -17,18 +17,28 @@
       "minecraft": "1.26.60.5",
       "engine_sha256": "988f6a61403b4381aa41e6c66d64cce441b14e561a9b10f647c2758ef3f2672a",
       "gameplay_tested": false
+    },
+    {
+      "platform": "android",
+      "architecture": "arm64-v8a",
+      "minecraft": "1.26.66.1",
+      "engine_sha256": "3c24bf3a20471be41449f1e5cd9354c657995468e412d1631d9828b3f3824892",
+      "engine_build_id": "e96ddd68541814923c35460f8b99f27a66c51232",
+      "native_registration_emulated": true,
+      "compiled_nether_hook_abi_emulated": true,
+      "gameplay_tested": false
     }
   ],
   "pending_targets": [
     {
-      "platform": "android",
-      "minecraft": "26.62",
-      "status": "needs_exact_engine_binary_and_native_port"
-    },
-    {
       "platform": "windows",
       "minecraft": "26.63",
       "status": "needs_exact_engine_binary_and_native_port"
+    },
+    {
+      "platform": "android",
+      "minecraft": "26.66",
+      "status": "signed_test_apk_pending_device_validation"
     }
   ]
 }

@@ -1,0 +1,39 @@
+{
+  "engine_sha256": "3c24bf3a20471be41449f1e5cd9354c657995468e412d1631d9828b3f3824892",
+  "engine_build_id": "e96ddd68541814923c35460f8b99f27a66c51232",
+  "minecraft": "1.26.66.1",
+  "emulated_engine_registration": true,
+  "native_id": 39,
+  "name_lookup_matches": true,
+  "id_lookup_matches": true,
+  "script_argument_custom_namespace_verified": true,
+  "script_argument_vanilla_namespace_preserved": true,
+  "own_icon_stem_verified": true,
+  "native_instance_duration_ticks": 6000,
+  "ordinary_ids_preserved": [
+    0,
+    1,
+    28,
+    38
+  ],
+  "compiled_module_hud_detour_verified": true,
+  "compiled_c_registration_verified": true,
+  "native_id_collision_refused": true,
+  "out_of_range_id_refused": true,
+  "hud_original_entries_preserved": 39,
+  "hud_expanded_entries": 40,
+  "extra_hud_entry_matches_native_initialization": true,
+  "external_libc_calls": {
+    "malloc": 65,
+    "memmove": 42,
+    "strlen": 35,
+    "memcpy": 22,
+    "free": 27,
+    "memcmp": 9,
+    "memchr": 2,
+    "emulated_engine_init": 2,
+    "snprintf": 2,
+    "__android_log_write": 2
+  },
+  "full_android_gameplay_tested": false
+}

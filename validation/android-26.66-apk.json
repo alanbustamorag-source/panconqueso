@@ -1,0 +1,23 @@
+{
+  "filename": "Bodriosafio_Launcher_Android_0_1_6.apk",
+  "size_bytes": 29817109,
+  "sha256": "48d29d3c56bec1f925b655ff5a8b8dbfa59113dbfd3067e07d481c1385fe2494",
+  "package": {
+    "name": "org.levimc.launcher",
+    "code": 10012,
+    "version": "0.1.6"
+  },
+  "previous_version_code": 10011,
+  "signing_certificate_sha256": "144b63f97269476b81895a3de9ac6ee3172cedde94399f8dae7c2bc4279beb47",
+  "same_signing_certificate_as_previous_apk": true,
+  "verified_zip_alignment": true,
+  "bundled_components": {
+    "assets/bodriosafio/libBodriosafioEffects.so": "c04b70ae7dbbad199e485a2a8b1cce6ea43d6a8e4d424327ee2baa77aa894209",
+    "assets/bodriosafio/libBuildLimitChanger.so": "4791a3d41884a4c49bc6ba02327684433ede70a8ef03fc3a351c01f321b97a17",
+    "assets/bodriosafio/Bodriosafio_0_3_15.mcaddon": "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3"
+  },
+  "corrected_pill_timer_tests_passed": 25,
+  "apk_built_and_signed": true,
+  "android_device_execution": false,
+  "gameplay_tested": false
+}

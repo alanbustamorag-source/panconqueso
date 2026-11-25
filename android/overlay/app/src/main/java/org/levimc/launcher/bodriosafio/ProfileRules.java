@@ -14,19 +14,22 @@ import java.util.List;
 
 /** Bodriosafio-specific profile logic. No Android dependencies, so it can be tested on the build host. */
 public final class ProfileRules {
-    public static final String COMPATIBLE_VERSION = "26.62";
+    public static final String COMPATIBLE_VERSION = "26.66";
     public static final String MOD_ID = "bodriosafio_nether";
     public static final String NATIVE_SHA256 = "4791a3d41884a4c49bc6ba02327684433ede70a8ef03fc3a351c01f321b97a17";
     public static final String ADDON_SHA256 = "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3";
     private ProfileRules() {}
 
     public static boolean compatible(String version) {
-        return version != null && version.trim().matches("(?:1\\.)?26\\.(?:60|62|63)(?:\\.[0-9]+)*");
+        return version != null && version.trim().matches("(?:1\\.)?26\\.(?:60|62|63|66)(?:\\.[0-9]+)*");
     }
 
     /** Native offsets are validated only for this exact Android build. */
     public static boolean nativeCompatible(String version) {
-        return "26.60.4".equals(version) || "1.26.60.4".equals(version);
+        if (version == null) return false;
+        String value = version.trim();
+        if (value.startsWith("1.")) value = value.substring(2);
+        return "26.66".equals(value) || "26.66.1".equals(value) || "26.66.01".equals(value);
     }
 
     public static void requireNativeVersion(String version) throws IOException {

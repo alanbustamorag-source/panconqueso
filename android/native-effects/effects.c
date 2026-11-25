@@ -1,4 +1,4 @@
-/* Bodriosafio native effect registration. Android ARM64, exact 26.60.4 build.
+/* Bodriosafio native effect registration. Android ARM64, exact engine profile.
  * No Minecraft executable code or assets are included in this module.
  * Registry operations use the game's own allocator, constructor and name map.
  */
@@ -33,10 +33,6 @@ struct PhdrInfo { uptr base; const char *name; const struct Phdr *phdr; u16 phnu
 
 #define API __attribute__((visibility("default")))
 #define COUNT(a) (sizeof(a) / sizeof((a)[0]))
-#define REGISTRY_OFFSET 0x141d8908UL
-#define INIT_OFFSET 0x100fd964UL
-#define HUD_CTOR_OFFSET 0x99c0e2cUL
-#define BUILD_NOTE_OFFSET 0x143200a8UL
 #define EFFECT_ID 39U
 #define OLD_COUNT 39U
 #define NEW_COUNT 40U
@@ -60,10 +56,10 @@ static const char identifier[] = "bodriosafio:anticombustion";
 static void status(const char *phase, const char *detail) {
   char data[1024];
   int len = snprintf(data, sizeof data,
-    "{\"module\":\"bodriosafio-native-effects\",\"version\":\"0.1.0\","
+    "{\"module\":\"bodriosafio-native-effects\",\"version\":\"" MODULE_VERSION "\","
     "\"phase\":\"%s\",\"detail\":\"%s\",\"effect_id\":39,"
     "\"identifier\":\"bodriosafio:anticombustion\",\"vanilla_count\":39,"
-    "\"registry_count\":40,\"game_build_id\":\"eb291b883dfdfaff70c4999c2eabd61885ae3e15\"}\n",
+    "\"registry_count\":40,\"game_build_id\":\"" ENGINE_BUILD_ID "\"}\n",
     phase, detail);
   __android_log_write(phase[0] == 'e' ? 6 : 4, "BodriosafioEffects", data);
   if (status_path[0] && len > 0 && (usize)len < sizeof data) {
@@ -167,10 +163,10 @@ static void register_effect(void) {
   typedef void *(*Factory)(u32, const void *, const char *, const u8 *, const int *, const int *);
   typedef void *(*Lookup)(const void *);
   typedef void *(*ById)(u32);
-  StringCtor string_ctor = (StringCtor)(game_base + 0x135d40c0UL);
-  Factory factory = (Factory)(game_base + 0x1010108cUL);
-  Lookup lookup = (Lookup)(game_base + 0x10101a58UL);
-  ById by_id = (ById)(game_base + 0x10101a80UL);
+  StringCtor string_ctor = (StringCtor)(game_base + STRING_CTOR_OFFSET);
+  Factory factory = (Factory)(game_base + FACTORY_OFFSET);
+  Lookup lookup = (Lookup)(game_base + GET_BY_NAME_OFFSET);
+  ById by_id = (ById)(game_base + GET_BY_ID_OFFSET);
   // A genuine libc++ string, constructed by this exact engine. It remains
   // alive for the process; the factory copies it into its own native objects.
   static u8 native_name[24] __attribute__((aligned(8)));
@@ -209,9 +205,9 @@ static void hud_ctor_hook(void *self, void *client) {
   typedef void *(*Allocate)(usize);
   typedef void (*Delete)(void *);
   typedef void (*RectCtor)(void *);
-  Allocate allocate = (Allocate)(game_base + 0xe803540UL);
-  Delete release = (Delete)(game_base + 0xe803424UL);
-  RectCtor rect = (RectCtor)(game_base + 0xe8305e8UL);
+  Allocate allocate = (Allocate)(game_base + ALLOCATE_OFFSET);
+  Delete release = (Delete)(game_base + RELEASE_OFFSET);
+  RectCtor rect = (RectCtor)(game_base + RECT_CTOR_OFFSET);
   u8 *expanded = allocate(NEW_COUNT * 36);
   memcpy(expanded, vector[0], length);
   memset(expanded + length, 0, 36);
@@ -231,6 +227,10 @@ static int bootstrap(void) {
   if (!build_note_readable || memcmp((void *)(game_base + BUILD_NOTE_OFFSET), expected_build_id, 20)) {
     status("error", "unsupported Minecraft build; no patches applied"); return 0;
   }
+  for (usize i=0; i<COUNT(function_words); ++i)
+    if (*(u32 *)(game_base + function_words[i].offset) != function_words[i].expected) {
+      status("error", "native function fingerprint mismatch; no patches applied"); return 0;
+    }
   if (!preload_path[0]) { status("error", "Levi preloader was not found"); return 0; }
   void *handle = dlopen(preload_path, 2 | 4);
   if (!handle) { status("error", "could not access the loaded preloader"); return 0; }

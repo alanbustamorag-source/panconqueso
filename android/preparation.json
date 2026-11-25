@@ -5,8 +5,8 @@
   "version": "0.1.6",
   "version_code": 10012,
   "repository": "alanbustamorag-source/panconqueso",
-  "android_target": "26.62",
-  "apk_distribution_status": "pending_exact_game_binary_native_port_and_device_validation",
+  "android_target": "26.66",
+  "apk_distribution_status": "signed_test_apk_pending_device_validation",
   "native_required": true,
   "fallback_to_addon_only": false
 }

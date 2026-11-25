@@ -1,10 +1,10 @@
 {
   "checked_on": "2026-11-24",
   "repository": "alanbustamorag-source/panconqueso",
-  "files_reviewed": 107,
+  "files_reviewed": 117,
   "addon_sha256": "900687d53f42d257fcd0642cde8a49952aad696e42b99b467c747879f5e255e3",
   "host_tests": {
-    "android_profile": "49 Android profile/version checks passed (host JVM, not Minecraft)",
+    "android_profile": "54 Android profile/version checks passed (host JVM, not Minecraft)",
     "windows_profile": "43 profile/version checks passed",
     "windows_channel": "PASS: 20 Windows update channel checks",
     "windows_integrated": "23 integrated launcher and update contract checks passed",

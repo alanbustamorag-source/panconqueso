@@ -77,6 +77,12 @@ object MinecraftRuntimePreparer {
         val gameManager = GamePackageManager.getInstance(context.applicationContext, version, trace, listener)
         trace.mark("GamePackageManager ready")
 
+        listener.onProgress(24, "Comprobando compatibilidad de los complementos")
+        val verifiedEngine = gameManager.resolveLibraryPath("minecraftpe")
+            ?: throw RuntimeException("No se encontró el motor de Minecraft")
+        org.levimc.launcher.bodriosafio.NativeEngineIdentity.requireCompatible(File(verifiedEngine))
+        trace.mark("Exact Bodriosafio engine verified", "26.66 ARM64")
+
         listener.onProgress(26, "Preparing launch")
         prepareMinecraftIntent(context, launchIntent, gameManager, version)
         trace.mark("Launch intent prepared")

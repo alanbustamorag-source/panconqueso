@@ -73,7 +73,7 @@ public final class BodriosafioProfile {
         log(context, "Inicio: recuperando el perfil y preparando complementos.");
         org.levimc.launcher.bodriosafio.update.AddonUpdateActivity.recoverBeforeLaunch(context, version);
         if (version == null || !ProfileRules.compatible(version.versionCode))
-            throw new IOException("Versiones objetivo: Minecraft 26.60, 26.62 o 26.63. Versión actual: " + ProfileRules.displayVersion(version == null ? null : version.versionCode));
+            throw new IOException("Este perfil requiere Minecraft 26.66. Versión actual: " + ProfileRules.displayVersion(version == null ? null : version.versionCode));
         if (version.abiList == null || !version.abiList.contains("arm64-v8a"))
             throw new IOException("Esta APK necesita la versión de Minecraft de 64 bits (ARM64).");
         if (version.modsDir == null) throw new IOException("No se encontró el perfil de Minecraft.");
@@ -90,7 +90,7 @@ public final class BodriosafioProfile {
         manifest.put("version", "1.1");
         manifest.put("description", "BuildLimitChanger original de Zeuroux, licencia MIT. Perfil de Bodriosafío incluido.");
         JSONArray versions = new JSONArray();
-        versions.put("26.60").put("26.60.*").put("1.26.60").put("1.26.60.*");
+        versions.put("26.66").put("26.66.*").put("1.26.66").put("1.26.66.*");
         manifest.put("minecraft_versions", versions);
         ProfileRules.atomicWrite(new File(directory, "manifest.json"), manifest.toString(2).getBytes(StandardCharsets.UTF_8));
 
