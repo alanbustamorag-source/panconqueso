@@ -1,0 +1,44 @@
+{
+  "compiled_v2_hook_abi_verified": true,
+  "engine_build_id": "e96ddd68541814923c35460f8b99f27a66c51232",
+  "dimension_arguments_offset": 96,
+  "scenarios": [
+    {
+      "dimension": "Nether",
+      "range_before": [
+        0,
+        128
+      ],
+      "range_after": [
+        0,
+        256
+      ],
+      "original_arguments_forwarded": true
+    },
+    {
+      "dimension": "Overworld",
+      "range_before": [
+        -64,
+        320
+      ],
+      "range_after": [
+        -64,
+        320
+      ],
+      "original_arguments_forwarded": true
+    },
+    {
+      "dimension": "TheEnd",
+      "range_before": [
+        0,
+        256
+      ],
+      "range_after": [
+        0,
+        256
+      ],
+      "original_arguments_forwarded": true
+    }
+  ],
+  "full_android_gameplay_tested": false
+}

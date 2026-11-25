@@ -26,7 +26,7 @@ import java.util.Set;
 /** Exact-build native registration plus the matching complete addon. */
 public final class NativeEffectsProfile {
     public static final String MOD_ID = "bodriosafio_native_effects";
-    public static final String NATIVE_SHA256 = "ff71ce36891acb8298eb949472d63cdc69e90632852251512344d60b9c6acfa7";
+    public static final String NATIVE_SHA256 = "c04b70ae7dbbad199e485a2a8b1cce6ea43d6a8e4d424327ee2baa77aa894209";
     private NativeEffectsProfile() {}
 
     public static void prepareForLaunch(Context context, GameVersion version) throws Exception {
@@ -48,10 +48,10 @@ public final class NativeEffectsProfile {
         manifest.put("name", "Anticombustión nativa");
         manifest.put("entry", library.getName());
         manifest.put("author", "Alan Bustamante · Bodriosafío");
-        manifest.put("version", "0.1.0");
-        manifest.put("description", "Registro experimental de un efecto propio; requiere el motor ARM64 1.26.60.4 verificado.");
+        manifest.put("version", "0.1.1");
+        manifest.put("description", "Efecto propio de Anticombustión para el motor ARM64 26.66 verificado.");
         JSONArray versions = new JSONArray();
-        versions.put("26.60").put("26.60.*").put("1.26.60").put("1.26.60.*");
+        versions.put("26.66").put("26.66.*").put("1.26.66").put("1.26.66.*");
         manifest.put("minecraft_versions", versions);
         ProfileRules.atomicWrite(new File(directory, "manifest.json"), manifest.toString(2).getBytes(StandardCharsets.UTF_8));
         String statusPath = new File(directory, "native-effects-status.json").getAbsolutePath();
@@ -100,7 +100,7 @@ public final class NativeEffectsProfile {
         if (!ProfileRules.nativeCompatible(gameVersion)) throw new IllegalStateException(
             "Esta compilación de Minecraft aún necesita adaptar los módulos nativos de Bodriosafío.");
         if (!loaded.contains(MOD_ID)) throw new IllegalStateException(
-            "No se pudo cargar Anticombustión nativa. Esta prueba requiere el motor ARM64 1.26.60.4 exacto. Revisa Registro y reinicia el launcher.");
+            "No se pudo cargar Anticombustión nativa para el motor ARM64 26.66 verificado. Revisa Registro y reinicia el launcher.");
     }
 
     public static String appendStatus(Context context, String previous) {

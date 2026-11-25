@@ -78,7 +78,7 @@ public final class AddonUpdateActivity extends Activity {
     public static void open(Activity host, GameVersion version) {
         if (!org.levimc.launcher.core.minecraft.LaunchPreparation.allowContentChanges(host)) return;
         try {
-            if (version == null || !ProfileRules.compatible(version.versionCode)) throw new Exception("Primero selecciona Minecraft 26.60, 26.62 o 26.63.");
+            if (version == null || !ProfileRules.compatible(version.versionCode)) throw new Exception("Primero selecciona una versión compatible de Minecraft (26.66).");
             if (MinecraftActivityState.isRunning(host)) throw new Exception("Cierra Minecraft antes de actualizar sus packs.");
             ArrayList<String> paths = new ArrayList<>();
             for (Path path : gameRoots(host, version)) paths.add(path.toString());

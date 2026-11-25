@@ -1,0 +1,230 @@
+{
+  "engine_sha256": "6c7b409d832e182537c0b1dbb8cc3c92f60b7795db7ea5e9f626fb6d6cb8c77f",
+  "engine_build_id": "eb291b883dfdfaff70c4999c2eabd61885ae3e15",
+  "native_id": 39,
+  "old_count": 39,
+  "new_count": 40,
+  "registry": 337479944,
+  "init_effects": 269474148,
+  "factory": 269488268,
+  "string_ctor": 324878528,
+  "get_by_name": 269490776,
+  "get_by_id": 269490816,
+  "table_references": [
+    269474408,
+    269487640,
+    269488068,
+    269488496,
+    269488936,
+    269489524,
+    269489948,
+    269490372,
+    269490592,
+    269490832,
+    269490848,
+    269494148,
+    269494268,
+    269494392,
+    269494520,
+    269494780,
+    269496356,
+    269497388,
+    269497444,
+    269497492,
+    269497552,
+    269497680,
+    269497728,
+    269497772,
+    269497824,
+    269497888,
+    269497936,
+    269498036,
+    269499080,
+    269501304,
+    269501920,
+    269503192,
+    269503608
+  ],
+  "instruction_patches": [
+    [
+      269490816,
+      1895864351,
+      1895865375,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269490864,
+      1895864351,
+      1895865375,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269494060,
+      1895864383,
+      1895865407,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269494180,
+      1895864383,
+      1895865407,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269494300,
+      1895864383,
+      1895865407,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269494424,
+      1895864383,
+      1895865407,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269494688,
+      1895864671,
+      1895865695,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269496252,
+      1895864639,
+      1895865663,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497380,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497436,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497484,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497544,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497672,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497720,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497764,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497816,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497880,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269497928,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269498028,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269499072,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269502324,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269503240,
+      1895864639,
+      1895865663,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269503600,
+      1895864607,
+      1895865631,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      192771116,
+      1895864351,
+      1895865375,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      275582084,
+      1895864351,
+      1895865375,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      275591460,
+      1895864415,
+      1895865439,
+      "effect ID unsigned upper bound"
+    ],
+    [
+      269490608,
+      4043629183,
+      4043637375,
+      "clear expanded table"
+    ],
+    [
+      236719344,
+      1895866079,
+      1895867103,
+      "effect enumeration"
+    ],
+    [
+      255386296,
+      1895866047,
+      1895867071,
+      "effect enumeration"
+    ]
+  ],
+  "hud_constructor": 161222188,
+  "hud_entry_bytes": 36,
+  "hud_vector_offset": 24,
+  "hud_old_entries": 39,
+  "hud_new_entries": 40,
+  "actor_effect_vector_growth": "dynamic in Actor::addEffect"
+}

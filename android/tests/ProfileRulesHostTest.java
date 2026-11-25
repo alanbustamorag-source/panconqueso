@@ -17,11 +17,16 @@ public class ProfileRulesHostTest {
         check(ProfileRules.compatible("1.26.62.1"), "Android internal hotfix");
         check(ProfileRules.compatible("26.63"), "verified stable release");
         check(!ProfileRules.compatible("26.70.26-preview"), "reject preview");
-        check(ProfileRules.nativeCompatible("1.26.60.4"), "validated native build");
+        check(ProfileRules.compatible("26.66"), "new Android hotfix");
+        check(ProfileRules.nativeCompatible("1.26.66.1"), "validated native build");
+        check(ProfileRules.nativeCompatible("1.26.66.01"), "native release version padding");
+        check(ProfileRules.nativeCompatible("26.66"), "native displayed release");
+        check(!ProfileRules.nativeCompatible("1.26.66.2"), "unverified servicing build");
+        check(!ProfileRules.nativeCompatible("1.26.60.4"), "previous profile needs its previous module");
         check(!ProfileRules.nativeCompatible("1.26.62.1"), "no native offsets on new hotfix");
         check(!ProfileRules.nativeCompatible("1.26.60.5"), "reject different Android native build");
         check(!ProfileRules.nativeCompatible(null), "unknown native build");
-        ProfileRules.requireNativeVersion("1.26.60.4");
+        ProfileRules.requireNativeVersion("1.26.66.1");
         check(true, "known native build may prepare");
         for (String unsupported : new String[] {"26.62", "1.26.63.1", "1.26.60.5", null}) {
             boolean nativeRejected = false;
