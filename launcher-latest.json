@@ -4,11 +4,11 @@
   "kind": "launcher",
   "platform": "android",
   "package": "org.levimc.launcher",
-  "version": "0.1.9",
-  "version_code": 10015,
+  "version": "0.1.10",
+  "version_code": 10016,
   "min_android": 28,
-  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.9/Bodriosafio_Launcher_Android_0_1_9.apk",
-  "sha256": "5331504675660ba560102cd69c0c6f7578c81df890c83f75cc0db6ca38803191",
+  "url": "https://github.com/alanbustamorag-source/panconqueso/releases/download/android-0.1.10/Bodriosafio_Launcher_Android_0_1_10.apk",
+  "sha256": "239b4095997ffd3b799cf19b69ff1144af3f963b5de90cc89928062fa1848db9",
   "size": 29829494,
-  "notes": "Minecraft Android 26.66.1 y 26.60.4 con Nether ampliado y Anticombustión. Incluye el addon 0.3.16 con la corrección de la pastilla, conserva las barras de descarga y la firma habitual. La prueba dentro de un mundo en un teléfono sigue pendiente."
+  "notes": "Corrige el arranque del launcher para Minecraft ARM64. Comprueba el SHA-256 de libminecraftpe.so antes de pasarlo a gxcore y regenera la caché. Arranque con Minecraft 1.26.66.1 confirmado en un Galaxy A51 con la APK de prueba. Esta publicación usa la firma oficial, compatible con la actualización desde la versión oficial 0.1.9."
 }
