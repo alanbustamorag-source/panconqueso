@@ -76,12 +76,6 @@ object MinecraftRuntimePreparer {
         NativeBridgeHelper.requireGxCoreLoaded()
         val gameManager = GamePackageManager.getInstance(context.applicationContext, version, trace, listener)
         trace.mark("GamePackageManager ready")
-        listener.onProgress(24, "Verificando el motor de Minecraft")
-        val enginePath = gameManager.resolveLibraryPath("minecraftpe")
-            ?: throw IllegalStateException("No se encontró el motor de Minecraft en este perfil.")
-        val profile = org.levimc.launcher.bodriosafio.ProfileRules.requireNativeProfile(version.versionCode)
-        profile.verifyEngine(File(enginePath))
-        trace.mark("Bodriosafio engine verified", profile.version)
 
         listener.onProgress(26, "Preparing launch")
         prepareMinecraftIntent(context, launchIntent, gameManager, version)
