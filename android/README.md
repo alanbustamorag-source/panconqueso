@@ -1,17 +1,19 @@
-# Android 0.1.9 (10015)
+# Android 0.1.10 (10016)
+
+Se verifica el SHA-256 de la copia original de `libminecraftpe.so` antes de que gxcore la procese. Al actualizar, el launcher vuelve a preparar la caché anterior.
 
 El overlay se aplica sobre el proyecto completo 0.1.5 r7; no es un proyecto
 Gradle independiente. El canal nuevo es alanbustamorag-source/panconqueso.
 
 ## Publicación y actualizaciones
 
-La APK firmada 0.1.9 (10015) se publica en la release `android-0.1.9`. El workflow comprueba el archivo y la firma antes de anunciar esta versión en `launcher-latest.json`. La descarga automática utiliza redes sin límite de datos y Android solicita confirmar la instalación. El addon tiene su propio canal en `latest.json`.
+La APK firmada 0.1.10 (10016) se publica en la release `android-0.1.10`. El workflow comprueba el archivo y la firma antes de anunciar esta versión en `launcher-latest.json`. La descarga automática utiliza redes sin límite de datos y Android solicita confirmar la instalación. El addon tiene su propio canal en `latest.json`.
 
 ## Compatibilidad de las fuentes del overlay
 
 Jugar exige el Nether ampliado y Anticombustión. El launcher comprueba el motor ARM64 para 26.60.4 y 26.66.1 antes de cargar sus módulos. También respeta el perfil seleccionado en Herramientas y conserva el requisito de Minecraft instalado desde Google Play.
 
-La biblioteca de Anticombustión para 26.66.1 procede de la APK firmada `android-0.1.6`. Las pruebas del módulo se encuentran en el commit `9774daeffb58d429af3f66e5f96f197248cb6644`. La APK 0.1.9 incorpora el addon 0.3.16. El registro dentro de un mundo en el teléfono sigue pendiente.
+La biblioteca de Anticombustión para 26.66.1 procede de la APK firmada `android-0.1.6`. Las pruebas del módulo se encuentran en el commit `9774daeffb58d429af3f66e5f96f197248cb6644`. La APK 0.1.10 incorpora el addon 0.3.16. El arranque de Minecraft se confirmó en un Galaxy A51 con la compilación de prueba.
 
 Las fuentes del módulo ARM64 están en native-effects. No se distribuye
 libminecraftpe.so ni se eliminan los controles de la copia oficial del juego.

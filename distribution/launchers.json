@@ -19,23 +19,23 @@
       "notes": "Launcher Windows 0.1.6: barras con porcentaje para descargar el addon y las actualizaciones del launcher. Incluye addon 0.3.15. Compilación y pruebas del host comprobadas; pendiente de prueba en Windows."
     },
     {
-      "name": "Bodriosafio_Launcher_Android_0_1_9.apk",
+      "name": "Bodriosafio_Launcher_Android_0_1_10.apk",
       "platform": "android",
-      "tag": "android-0.1.9",
-      "title": "Bodriosafío Android 0.1.9",
-      "version": "0.1.9",
-      "version_code": 10015,
+      "tag": "android-0.1.10",
+      "title": "Bodriosafío Android 0.1.10",
+      "version": "0.1.10",
+      "version_code": 10016,
       "size": 29829494,
-      "sha256": "5331504675660ba560102cd69c0c6f7578c81df890c83f75cc0db6ca38803191",
-      "notes": "Minecraft Android 26.66.1 y 26.60.4 con Nether ampliado y Anticombustión. Incluye el addon 0.3.16 con la corrección de la pastilla, conserva las barras de descarga y la firma habitual. La prueba dentro de un mundo en un teléfono sigue pendiente.",
+      "sha256": "239b4095997ffd3b799cf19b69ff1144af3f963b5de90cc89928062fa1848db9",
+      "notes": "Corrige el arranque del launcher para Minecraft ARM64. Comprueba el SHA-256 de libminecraftpe.so antes de pasarlo a gxcore y regenera la caché. Arranque con Minecraft 1.26.66.1 confirmado en un Galaxy A51 con la APK de prueba. Esta publicación usa la firma oficial, compatible con la actualización desde la versión oficial 0.1.9.",
       "addon_name": "Bodriosafio_0_3_16.mcaddon",
       "addon_sha256": "41c85c8da165240a2c6e3c4b5a33fcff7fbdc679745d5cfd4636ea02b75f798d",
       "patch": {
-        "base_tag": "android-0.1.7",
-        "base_name": "Bodriosafio_Launcher_Android_0_1_7.apk",
-        "base_sha256": "5cd2b0e798558592ee91dd9a823fea6bca4776d409f90e541961ac00998afde7",
-        "file": "Bodriosafio_Launcher_Android_0_1_7_a_0_1_9.patch.zst",
-        "sha256": "cca31448f20a44ade8d4ffef0b88c3a8bea3b1400c8463b0283be3745afce2c0"
+        "base_tag": "android-0.1.9",
+        "base_name": "Bodriosafio_Launcher_Android_0_1_9.apk",
+        "base_sha256": "5331504675660ba560102cd69c0c6f7578c81df890c83f75cc0db6ca38803191",
+        "file": "Bodriosafio_Launcher_Android_0_1_9_a_0_1_10.patch.zst",
+        "sha256": "e653fc480a43feb2a4c413558a17d3d1ea237eed79d40cbc9de6211ba58e2505"
       }
     }
   ]

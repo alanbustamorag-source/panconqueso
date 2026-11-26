@@ -15,6 +15,7 @@ import java.util.List;
 
 /** Bodriosafio-specific profile logic. No Android dependencies, so it can be tested on the build host. */
 public final class ProfileRules {
+    public static final String ENGINE_LIBRARY = "libminecraftpe.so";
     public static final String NATIVE_VERSIONS = "26.60.4 y 26.66.1";
     public enum NativeProfile {
         LEGACY("26.60.4", "6c7b409d832e182537c0b1dbb8cc3c92f60b7795db7ea5e9f626fb6d6cb8c77f",
